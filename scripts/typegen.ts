@@ -5,6 +5,7 @@ import { builtinRules } from 'eslint/use-at-your-own-risk'
 import {
 	combine,
 	comments,
+	morgan,
 	ignores,
 	imports,
 	javascript
@@ -19,6 +20,7 @@ const configs = await combine(
 		},
 	},
 	comments(),
+	morgan(),
 	ignores(),
 	imports(),
 	javascript()
