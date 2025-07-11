@@ -25,6 +25,7 @@
 		"access": "public"
 	},
 	"scripts": {
+		"build": "pnpm run build:typegen && tsdown",
 		"build:typegen": "tsx scripts/typegen.ts",
 		"lint": "eslint",
 		"lint:fix": "pnpm run lint --fix",
@@ -44,6 +45,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "catalog:dev",
+		"@typescript/native-preview": "catalog:dev",
 		"eslint": "catalog:",
 		"eslint-typegen": "catalog:dev",
 		"tsdown": "catalog:dev",
