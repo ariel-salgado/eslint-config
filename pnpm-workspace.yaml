@@ -2,12 +2,22 @@ packages: []
 
 catalog:
   eslint: ^9.30.0
+  globals: ^16.3.0
 
 catalogs:
   dev:
     '@types/node': ^24.0.3
+    eslint-typegen: ^2.2.0
     tsdown: ^0.12.8
+    tsx: ^4.20.3
     typescript: ^5.8.3
 
   plugins:
+    '@eslint-community/eslint-plugin-eslint-comments': ^4.5.0
+    '@stylistic/eslint-plugin': ^5.1.0
     eslint-plugin-ariel: ^0.0.2
+    eslint-plugin-import-lite: ^0.3.0
+    eslint-plugin-unused-imports: ^4.1.4
+
+onlyBuiltDependencies:
+  - esbuild

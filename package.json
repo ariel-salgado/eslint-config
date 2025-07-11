@@ -25,6 +25,9 @@
 		"access": "public"
 	},
 	"scripts": {
+		"build:typegen": "tsx scripts/typegen.ts",
+		"lint": "eslint",
+		"lint:fix": "pnpm run lint --fix",
 		"check": "tsc --noEmit",
 		"prepublishOnly": "pnpm run build"
 	},
@@ -32,12 +35,19 @@
 		"eslint": "^9.5.0"
 	},
 	"dependencies": {
-		"eslint-plugin-ariel": "catalog:plugins"
+		"@eslint-community/eslint-plugin-eslint-comments": "catalog:plugins",
+		"@stylistic/eslint-plugin": "catalog:plugins",
+		"eslint-plugin-ariel": "catalog:plugins",
+		"eslint-plugin-import-lite": "catalog:plugins",
+		"eslint-plugin-unused-imports": "catalog:plugins",
+		"globals": "catalog:"
 	},
 	"devDependencies": {
 		"@types/node": "catalog:dev",
 		"eslint": "catalog:",
+		"eslint-typegen": "catalog:dev",
 		"tsdown": "catalog:dev",
+		"tsx": "catalog:dev",
 		"typescript": "catalog:dev"
 	}
 }
