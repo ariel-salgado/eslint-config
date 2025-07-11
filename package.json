@@ -39,6 +39,7 @@
 		"@eslint-community/eslint-plugin-eslint-comments": "catalog:plugins",
 		"@stylistic/eslint-plugin": "catalog:plugins",
 		"eslint-plugin-ariel": "catalog:plugins",
+		"eslint-plugin-de-morgan": "catalog:plugins",
 		"eslint-plugin-import-lite": "catalog:plugins",
 		"eslint-plugin-unused-imports": "catalog:plugins",
 		"globals": "catalog:"
