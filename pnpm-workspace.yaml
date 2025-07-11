@@ -1,0 +1,13 @@
+packages: []
+
+catalog:
+  eslint: ^9.30.0
+
+catalogs:
+  dev:
+    '@types/node': ^24.0.3
+    tsdown: ^0.12.8
+    typescript: ^5.8.3
+
+  plugins:
+    eslint-plugin-ariel: ^0.0.2

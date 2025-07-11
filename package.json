@@ -1,0 +1,43 @@
+{
+	"name": "@ariel/eslint-config",
+	"version": "0.0.1",
+	"type": "module",
+	"packageManager": "pnpm@10.13.1",
+	"description": "ESLint config for @ariel-salgado.",
+	"author": "Ariel Salgado <ariel.salgado.acevedo@gmail.com>",
+	"license": "MIT",
+	"homepage": "https://github.com/ariel-salgado/eslint-config#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ariel-salgado/eslint-config.git"
+	},
+	"files": [
+		"dist"
+	],
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": "./dist/index.js",
+		"./package.json": "./package.json"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"check": "tsc --noEmit",
+		"prepublishOnly": "pnpm run build"
+	},
+	"peerDependencies": {
+		"eslint": "^9.5.0"
+	},
+	"dependencies": {
+		"eslint-plugin-ariel": "catalog:plugins"
+	},
+	"devDependencies": {
+		"@types/node": "catalog:dev",
+		"eslint": "catalog:",
+		"tsdown": "catalog:dev",
+		"typescript": "catalog:dev"
+	}
+}
