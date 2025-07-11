@@ -1,26 +1,33 @@
-import fs from 'node:fs/promises'
-
+import { writeFile } from 'node:fs/promises'
 import { flatConfigsToRulesDTS } from 'eslint-typegen/core'
 import { builtinRules } from 'eslint/use-at-your-own-risk'
 
 import {
-    combine,
+	combine,
+	comments,
+	ignores,
+	imports,
+	javascript
 } from '../src';
 
 const configs = await combine(
-    {
-        plugins: {
-            '': {
-                rules: Object.fromEntries(builtinRules.entries()),
-            },
-        },
-    },
+	{
+		plugins: {
+			'': {
+				rules: Object.fromEntries(builtinRules),
+			},
+		},
+	},
+	comments(),
+	ignores(),
+	imports(),
+	javascript()
 )
 
 const config_names = configs.map(i => i.name).filter(Boolean) as string[]
 
 let dts = await flatConfigsToRulesDTS(configs, {
-    includeAugmentation: false,
+	includeAugmentation: false,
 })
 
 dts += `
@@ -28,4 +35,4 @@ dts += `
 export type config_names = ${config_names.map(i => `'${i}'`).join(' | ')}
 `
 
-await fs.writeFile('src/typegen.d.ts', dts)
+await writeFile('src/typegen.d.ts', dts)
