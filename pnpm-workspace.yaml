@@ -13,6 +13,7 @@ catalogs:
   dev:
     '@types/node': ^24.0.13
     '@typescript/native-preview': 7.0.0-dev.20250711.1
+    bumpp: ^10.2.0
     eslint-typegen: ^2.2.1
     svelte: ^5.35.6
     tailwindcss: ^4.1.11

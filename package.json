@@ -27,9 +27,11 @@
   "scripts": {
     "build": "pnpm run build:typegen && tsdown --clean",
     "build:typegen": "tsx scripts/typegen.ts",
+    "dev": "tsdown --watch",
     "lint": "eslint",
     "lint:fix": "pnpm run lint --fix",
     "check": "tsc --noEmit",
+    "release": "bumpp && pnpm publish",
     "prepublishOnly": "pnpm run build"
   },
   "peerDependencies": {
@@ -84,6 +86,7 @@
   "devDependencies": {
     "@types/node": "catalog:dev",
     "@typescript/native-preview": "catalog:dev",
+    "bumpp": "catalog:dev",
     "eslint": "catalog:",
     "eslint-plugin-better-tailwindcss": "catalog:plugins",
     "eslint-plugin-svelte": "catalog:plugins",
