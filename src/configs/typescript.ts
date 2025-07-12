@@ -8,11 +8,11 @@ import type {
 	OptionsTypeScriptParserOptions,
 } from '../types';
 
+import process from 'node:process';
+
 import { plugin_ariel } from '../plugins';
 import { GLOB_TS, GLOB_MARKDOWN } from '../globs';
 import { rename_rules, interop_default } from '../utils';
-
-import process from 'node:process';
 
 export async function typescript(
 	options: OptionsFiles & OptionsComponentExts & OptionsOverrides & OptionsTypeScriptWithTypes & OptionsTypeScriptParserOptions & OptionsProjectType = {},

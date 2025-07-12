@@ -1,3 +1,7 @@
+import { writeFile } from 'node:fs/promises';
+import { builtinRules } from 'eslint/use-at-your-own-risk';
+import { flatConfigsToRulesDTS } from 'eslint-typegen/core';
+
 import {
 	node,
 	pnpm,
@@ -24,10 +28,6 @@ import {
 	sort_ts_config,
 	sort_package_json,
 } from '../src';
-
-import { writeFile } from 'node:fs/promises';
-import { builtinRules } from 'eslint/use-at-your-own-risk';
-import { flatConfigsToRulesDTS } from 'eslint-typegen/core';
 
 const configs = await combine(
 	{

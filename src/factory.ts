@@ -2,6 +2,9 @@ import type { Linter } from 'eslint';
 import type { RuleOptions, ConfigNames } from './typegen';
 import type { Awaitable, OptionsConfig, TypedFlatConfigItem } from './types';
 
+import { isPackageExists } from 'local-pkg';
+import { FlatConfigComposer } from 'eslint-flat-config-utils';
+
 import { interop_default } from './utils';
 import { has_svelte, has_tailwindcss, is_in_editor_env } from './env';
 import {
@@ -29,9 +32,6 @@ import {
 	sort_ts_config,
 	sort_package_json,
 } from './configs';
-
-import { isPackageExists } from 'local-pkg';
-import { FlatConfigComposer } from 'eslint-flat-config-utils';
 
 const flat_config_props = [
 	'name',

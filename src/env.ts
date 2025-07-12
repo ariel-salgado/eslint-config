@@ -1,4 +1,5 @@
 import process from 'node:process';
+
 import { isPackageExists } from 'local-pkg';
 
 export function has_typescript(): boolean {

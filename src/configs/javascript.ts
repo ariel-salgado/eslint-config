@@ -1,8 +1,8 @@
 import type { OptionsOverrides, TypedFlatConfigItem } from '../types';
 
-import { plugin_ariel, plugin_unused_imports } from '../plugins';
-
 import globals from 'globals';
+
+import { plugin_ariel, plugin_unused_imports } from '../plugins';
 
 export async function javascript(options: OptionsOverrides = {}): Promise<TypedFlatConfigItem[]> {
 	const {
