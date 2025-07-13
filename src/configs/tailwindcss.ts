@@ -30,7 +30,7 @@ export async function tailwindcss(
 				...plugin_tailwindcss.configs.recommended.rules,
 			},
 			settings: {
-				tailwindcss: {
+				'better-tailwindcss': {
 					entryPoint,
 				},
 			},
