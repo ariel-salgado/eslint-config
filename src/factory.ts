@@ -111,9 +111,8 @@ export function ariel(
 		}
 	}
 
-	// Extract tailwindcss rules from userConfigs BEFORE processing
-	const extractedTailwindcssRules: Record<string, any> = {};
-	const cleanedUserConfigs: typeof userConfigs = [];
+	const extracted_tailwindcss_rules: Record<string, any> = {};
+	const cleaned_user_configs: typeof userConfigs = [];
 
 	for (const config of userConfigs) {
 		if (config && typeof config === 'object' && 'rules' in config) {
@@ -123,7 +122,7 @@ export function ariel(
 			if (rules) {
 				for (const [ruleName, ruleConfig] of Object.entries(rules)) {
 					if (ruleName.startsWith('tailwindcss/')) {
-						extractedTailwindcssRules[ruleName] = ruleConfig;
+						extracted_tailwindcss_rules[ruleName] = ruleConfig;
 					}
 					else {
 						nonTailwindcssRules[ruleName] = ruleConfig;
@@ -133,14 +132,14 @@ export function ariel(
 
 			// Only add back the config if it has non-tailwindcss rules or other properties
 			if (Object.keys(nonTailwindcssRules).length > 0 || Object.keys(restConfig).length > 0) {
-				cleanedUserConfigs.push({
+				cleaned_user_configs.push({
 					...restConfig,
 					...(Object.keys(nonTailwindcssRules).length > 0 ? { rules: nonTailwindcssRules } : {}),
 				});
 			}
 		}
 		else {
-			cleanedUserConfigs.push(config);
+			cleaned_user_configs.push(config);
 		}
 	}
 
@@ -219,7 +218,7 @@ export function ariel(
 	if (enable_tailwindcss) {
 		configs.push(tailwindcss({
 			overrides: get_overrides(options, 'tailwindcss'),
-			userRules: extractedTailwindcssRules, // Pass extracted tailwindcss rules
+			userRules: extracted_tailwindcss_rules,
 		}));
 	}
 
@@ -288,7 +287,7 @@ export function ariel(
 	composer = composer
 		.append(
 			...configs,
-			...cleanedUserConfigs as any, // Use ONLY cleanedUserConfigs, not original userConfigs
+			...cleaned_user_configs as any,
 		);
 
 	if (autoRenamePlugins) {
