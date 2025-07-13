@@ -28,6 +28,20 @@ export async function tailwindcss(
 			files,
 			rules: {
 				...plugin_tailwindcss.configs.recommended.rules,
+				'tailwindcss/enforce-consistent-line-wrapping': [
+					'error',
+					{
+						indent: 'tab',
+						printWidth: 120,
+						preferSingleLine: true,
+					},
+				],
+				'tailwindcss/no-unregistered-classes': [
+					'error',
+					{
+						detectComponentClasses: true,
+					},
+				],
 			},
 			settings: {
 				'better-tailwindcss': {
