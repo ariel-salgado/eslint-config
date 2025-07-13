@@ -29,6 +29,7 @@ export async function tailwindcss(
 			rules: {
 				...plugin_tailwindcss.configs.recommended.rules,
 				'tailwindcss/enforce-consistent-line-wrapping': 'off',
+				'tailwindcss/enforce-shorthand-classes': 'error',
 				'tailwindcss/no-unregistered-classes': [
 					'error',
 					{
