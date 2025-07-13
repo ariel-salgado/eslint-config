@@ -65,6 +65,7 @@ export async function perfectionist(): Promise<TypedFlatConfigItem[]> {
 					},
 				],
 				'perfectionist/sort-named-exports': ['error', { order: 'asc', type: 'line-length' }],
+				'no-duplicate-imports': 'off',
 			},
 		},
 	];
