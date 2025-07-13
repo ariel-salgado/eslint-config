@@ -23,14 +23,14 @@ export async function tailwindcss(
 		{
 			name: 'ariel/tailwindcss',
 			plugins: {
-				'better-tailwindcss': plugin_tailwindcss,
+				tailwindcss: plugin_tailwindcss,
 			},
 			files,
 			rules: {
 				...plugin_tailwindcss.configs.recommended.rules,
 			},
 			settings: {
-				'better-tailwindcss': {
+				tailwindcss: {
 					entryPoint,
 				},
 			},
