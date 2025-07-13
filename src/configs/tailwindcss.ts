@@ -1,17 +1,15 @@
-import type { OptionsFiles, OptionsOverrides, TypedFlatConfigItem, OptionsHasTailwindCSS } from '../types';
+import type { OptionsFiles, TailwindCSSOptions, TypedFlatConfigItem, OptionsHasTailwindCSS } from '../types';
 
 import { GLOB_SVELTE } from '../globs';
 import { ensure_packages, interop_default } from '../utils';
 
 export async function tailwindcss(
-	options: OptionsHasTailwindCSS & OptionsOverrides & OptionsFiles & {
-		userRules?: Record<string, any>;
-	} = {},
+	options: OptionsHasTailwindCSS & TailwindCSSOptions & OptionsFiles = {},
 ): Promise<TypedFlatConfigItem[]> {
 	const {
 		files = [GLOB_SVELTE],
 		overrides = {},
-		userRules = {},
+		entryPoint = 'src/app.css',
 	} = options;
 
 	await ensure_packages([
@@ -20,13 +18,6 @@ export async function tailwindcss(
 	]);
 
 	const plugin_tailwindcss = await interop_default(import('eslint-plugin-better-tailwindcss'));
-
-	const tailwindcss_user_rules = Object.entries(userRules)
-		.filter(([key]) => key.startsWith('tailwindcss/'))
-		.reduce((acc, [key, value]) => {
-			acc[key] = value;
-			return acc;
-		}, {} as Record<string, any>);
 
 	return [
 		{
@@ -37,7 +28,11 @@ export async function tailwindcss(
 			files,
 			rules: {
 				...plugin_tailwindcss.configs.recommended.rules,
-				...tailwindcss_user_rules,
+			},
+			settings: {
+				'better-tailwindcss': {
+					entryPoint,
+				},
 			},
 			...overrides,
 		},

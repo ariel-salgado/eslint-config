@@ -5,6 +5,7 @@ import type { Awaitable, OptionsConfig, TypedFlatConfigItem } from './types';
 import { isPackageExists } from 'local-pkg';
 import { FlatConfigComposer } from 'eslint-flat-config-utils';
 
+import { GLOB_SVELTE } from './globs';
 import { interop_default } from './utils';
 import { has_svelte, has_tailwindcss, is_in_editor_env } from './env';
 import {
@@ -218,7 +219,12 @@ export function ariel(
 	if (enable_tailwindcss) {
 		configs.push(tailwindcss({
 			overrides: get_overrides(options, 'tailwindcss'),
-			userRules: extracted_tailwindcss_rules,
+			...(enable_svelte
+				? {
+						files: [GLOB_SVELTE],
+						entryPoint: 'src/app.css',
+					}
+				: {}),
 		}));
 	}
 

@@ -38,6 +38,10 @@ export interface StylisticConfig
 
 export interface StylisticOptions extends StylisticConfig, OptionsOverrides {};
 
+export interface TailwindCSSOptions extends OptionsOverrides {
+	entryPoint?: string;
+};
+
 export interface OptionsOverrides {
 	overrides?: TypedFlatConfigItem['rules'];
 }
@@ -179,7 +183,7 @@ export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType 
 	 *
 	 * @default false
 	 */
-	tailwindcss?: boolean | OptionsOverrides;
+	tailwindcss?: boolean | TailwindCSSOptions;
 
 	/**
 	 * Enable pnpm (workspace/catalogs) support.
