@@ -20,8 +20,8 @@ export async function typescript(
 	const {
 		componentExts = [],
 		overrides = {},
-		overrides_type_aware = {},
-		parser_options = {},
+		OverridesTypeAware = {},
+		parserOptions = {},
 		type = 'app',
 	} = options;
 
@@ -30,12 +30,12 @@ export async function typescript(
 		...componentExts.map(ext => `**/*.${ext}`),
 	];
 
-	const files_type_aware = options.files_type_aware ?? [GLOB_TS];
-	const ignores_type_aware = options.ignores_type_aware ?? [
+	const files_type_aware = options.filesTypeAware ?? [GLOB_TS];
+	const ignores_type_aware = options.ignoresTypeAware ?? [
 		`${GLOB_MARKDOWN}/**`,
 	];
-	const tsconfig_path = options?.tsconfig_path
-		? options.tsconfig_path
+	const tsconfig_path = options?.tsconfigPath
+		? options.tsconfigPath
 		: undefined;
 	const is_type_aware = !!tsconfig_path;
 
@@ -89,7 +89,7 @@ export async function typescript(
 								tsconfigRootDir: process.cwd(),
 							}
 						: {},
-					...parser_options as any,
+					...parserOptions as any,
 				},
 			},
 			name: `ariel/typescript/${type_aware ? 'type-aware-parser' : 'parser'}`,
@@ -181,7 +181,7 @@ export async function typescript(
 					name: 'ariel/typescript/rules-type-aware',
 					rules: {
 						...type_aware_rules,
-						...overrides_type_aware,
+						...OverridesTypeAware,
 					},
 				}]
 			: [],

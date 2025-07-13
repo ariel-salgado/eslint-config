@@ -4,7 +4,7 @@ import { plugin_unicorn } from '../plugins';
 
 export async function unicorn(options: OptionsUnicorn = {}): Promise<TypedFlatConfigItem[]> {
 	const {
-		all_recommended = false,
+		allRecommended = false,
 		overrides = {},
 	} = options;
 	return [
@@ -14,7 +14,7 @@ export async function unicorn(options: OptionsUnicorn = {}): Promise<TypedFlatCo
 				unicorn: plugin_unicorn,
 			},
 			rules: {
-				...(all_recommended
+				...(allRecommended
 					? plugin_unicorn.configs.recommended.rules
 					: {
 							'unicorn/consistent-empty-array-spread': 'error',

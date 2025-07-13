@@ -21,7 +21,7 @@ export interface OptionsComponentExts {
 }
 
 export interface OptionsUnicorn extends OptionsOverrides {
-	all_recommended?: boolean;
+	allRecommended?: boolean;
 }
 
 export interface OptionsFiles {
@@ -59,18 +59,14 @@ export interface OptionsHasTailwindCSS {
 }
 
 export interface OptionsTypeScriptParserOptions {
-	parser_options?: Partial<ParserOptions>;
-	files_type_aware?: string[];
-	ignores_type_aware?: string[];
+	parserOptions?: Partial<ParserOptions>;
+	filesTypeAware?: string[];
+	ignoresTypeAware?: string[];
 };
 
 export interface OptionsTypeScriptWithTypes {
-	tsconfig_path?: string;
-	overrides_type_aware?: TypedFlatConfigItem['rules'];
-}
-
-export interface OptionsTailwindCSS extends OptionsOverrides {
-	entry_point?: string;
+	tsconfigPath?: string;
+	OverridesTypeAware?: TypedFlatConfigItem['rules'];
 }
 
 export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType {
@@ -183,7 +179,7 @@ export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType 
 	 *
 	 * @default false
 	 */
-	tailwindcss?: boolean | OptionsTailwindCSS;
+	tailwindcss?: boolean | OptionsOverrides;
 
 	/**
 	 * Enable pnpm (workspace/catalogs) support.
