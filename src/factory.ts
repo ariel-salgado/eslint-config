@@ -46,7 +46,6 @@ const flat_config_props = [
 export const default_plugin_renaming = {
 	'@stylistic': 'style',
 	'@typescript-eslint': 'ts',
-	'better-tailwindcss': 'tailwindcss',
 	'import-lite': 'import',
 	'n': 'node',
 	'vitest': 'test',
@@ -85,7 +84,7 @@ export function ariel(
 	if (is_in_editor == null) {
 		is_in_editor = is_in_editor_env();
 		if (is_in_editor)
-		// eslint-disable-next-line no-console
+			// eslint-disable-next-line no-console
 			console.log('[@ariel/eslint-config] Detected running in editor, some rules are disabled.');
 	}
 
@@ -109,6 +108,39 @@ export function ariel(
 				name: 'ariel/gitignore',
 				strict: false,
 			})]));
+		}
+	}
+
+	// Extract tailwindcss rules from userConfigs BEFORE processing
+	const extractedTailwindcssRules: Record<string, any> = {};
+	const cleanedUserConfigs: typeof userConfigs = [];
+
+	for (const config of userConfigs) {
+		if (config && typeof config === 'object' && 'rules' in config) {
+			const { rules, ...restConfig } = config;
+			const nonTailwindcssRules: Record<string, any> = {};
+
+			if (rules) {
+				for (const [ruleName, ruleConfig] of Object.entries(rules)) {
+					if (ruleName.startsWith('tailwindcss/')) {
+						extractedTailwindcssRules[ruleName] = ruleConfig;
+					}
+					else {
+						nonTailwindcssRules[ruleName] = ruleConfig;
+					}
+				}
+			}
+
+			// Only add back the config if it has non-tailwindcss rules or other properties
+			if (Object.keys(nonTailwindcssRules).length > 0 || Object.keys(restConfig).length > 0) {
+				cleanedUserConfigs.push({
+					...restConfig,
+					...(Object.keys(nonTailwindcssRules).length > 0 ? { rules: nonTailwindcssRules } : {}),
+				});
+			}
+		}
+		else {
+			cleanedUserConfigs.push(config);
 		}
 	}
 
@@ -187,6 +219,7 @@ export function ariel(
 	if (enable_tailwindcss) {
 		configs.push(tailwindcss({
 			overrides: get_overrides(options, 'tailwindcss'),
+			userRules: extractedTailwindcssRules, // Pass extracted tailwindcss rules
 		}));
 	}
 
@@ -255,7 +288,7 @@ export function ariel(
 	composer = composer
 		.append(
 			...configs,
-			...userConfigs as any,
+			...cleanedUserConfigs as any, // Use ONLY cleanedUserConfigs, not original userConfigs
 		);
 
 	if (autoRenamePlugins) {

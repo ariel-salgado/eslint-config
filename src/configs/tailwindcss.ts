@@ -4,11 +4,14 @@ import { GLOB_SVELTE } from '../globs';
 import { ensure_packages, interop_default } from '../utils';
 
 export async function tailwindcss(
-	options: OptionsHasTailwindCSS & OptionsOverrides & OptionsFiles = {},
+	options: OptionsHasTailwindCSS & OptionsOverrides & OptionsFiles & {
+		userRules?: Record<string, any>;
+	} = {},
 ): Promise<TypedFlatConfigItem[]> {
 	const {
 		files = [GLOB_SVELTE],
 		overrides = {},
+		userRules = {},
 	} = options;
 
 	await ensure_packages([
@@ -17,6 +20,13 @@ export async function tailwindcss(
 	]);
 
 	const plugin_tailwindcss = await interop_default(import('eslint-plugin-better-tailwindcss'));
+
+	const tailwindcss_user_rules = Object.entries(userRules)
+		.filter(([key]) => key.startsWith('tailwindcss/'))
+		.reduce((acc, [key, value]) => {
+			acc[key] = value;
+			return acc;
+		}, {} as Record<string, any>);
 
 	return [
 		{
@@ -27,6 +37,7 @@ export async function tailwindcss(
 			files,
 			rules: {
 				...plugin_tailwindcss.configs.recommended.rules,
+				...tailwindcss_user_rules,
 			},
 			...overrides,
 		},
