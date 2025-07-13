@@ -51,6 +51,7 @@ export async function svelte(
 			processor: plugin_svelte.processors['.svelte'],
 			rules: {
 				'no-undef': 'off',
+				'prefer-const': 'off',
 				'no-unused-vars': ['error', {
 					args: 'none',
 					caughtErrors: 'none',
