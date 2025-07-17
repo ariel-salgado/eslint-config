@@ -13,7 +13,7 @@ export async function svelte(
 	} = options;
 
 	const {
-		indent = 4,
+		indent = 'tab',
 		quotes = 'single',
 	} = typeof stylistic === 'boolean' ? {} : stylistic;
 
