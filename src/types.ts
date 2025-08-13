@@ -6,10 +6,11 @@ import type { StylisticCustomizeOptions } from '@stylistic/eslint-plugin';
 
 export type Awaitable<T> = T | Promise<T>;
 
-export interface Rules extends RuleOptions {}
+export type Rules = Record<string, Linter.RuleEntry<any> | undefined> & RuleOptions;
 
-export type TypedFlatConfigItem = Omit<Linter.Config<Linter.RulesRecord & Rules>, 'plugins'> & {
+export type TypedFlatConfigItem = Omit<Linter.Config, 'plugins' | 'rules'> & {
 	plugins?: Record<string, any>;
+	rules?: Rules;
 };
 
 export type OptionsTypescript
