@@ -55,6 +55,35 @@ export const default_plugin_renaming = {
 };
 
 /**
+ * Dynamically install a package if it's not already available
+ */
+async function ensure_packages(packageName: string): Promise<void> {
+	if (!isPackageExists(packageName)) {
+		try {
+			// Try to install the package dynamically
+			const { execSync } = await import('node:child_process');
+			const packageManager = isPackageExists('pnpm') ? 'pnpm' : isPackageExists('yarn') ? 'yarn' : 'npm';
+
+			// eslint-disable-next-line no-console
+			console.log(`[@ariel/eslint-config] Installing ${packageName}...`);
+
+			const command = packageManager === 'pnpm'
+				? `pnpm add -D ${packageName}`
+				: packageManager === 'yarn'
+					? `yarn add -D ${packageName}`
+					: `npm install -D ${packageName}`;
+
+			execSync(command, { stdio: 'inherit' });
+			// eslint-disable-next-line no-console
+			console.log(`[@ariel/eslint-config] Successfully installed ${packageName}`);
+		}
+		catch (error) {
+			console.warn(`[@ariel/eslint-config] Failed to install ${packageName}. Please install it manually:`, error);
+		}
+	}
+}
+
+/**
  * Construct an array of ESLint flat config items.
  *
  * @param {OptionsConfig & TypedFlatConfigItem} options
@@ -97,6 +126,24 @@ export function ariel(
 			: {};
 
 	const configs: Awaitable<TypedFlatConfigItem[]>[] = [];
+
+	// Auto-install required packages
+	const packages_to_install: Promise<void>[] = [];
+
+	if (enable_svelte) {
+		packages_to_install.push(ensure_packages('eslint-plugin-svelte'));
+	}
+
+	if (enable_tailwindcss) {
+		packages_to_install.push(ensure_packages('eslint-plugin-better-tailwindcss'));
+	}
+
+	// Wait for installations to complete before proceeding
+	if (packages_to_install.length > 0) {
+		Promise.all(packages_to_install).catch((error) => {
+			console.warn('[@ariel/eslint-config] Some packages failed to install automatically:', error);
+		});
+	}
 
 	if (enable_git_ignore) {
 		if (typeof enable_git_ignore !== 'boolean') {
