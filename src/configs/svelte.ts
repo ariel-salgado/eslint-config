@@ -81,6 +81,7 @@ export async function svelte(
 				'svelte/sort-attributes': 'error',
 				'svelte/system': 'error',
 				'svelte/valid-each-key': 'error',
+				'svelte/html-quotes': ['error', { prefer: quotes === 'backtick' ? 'single' : quotes }],
 
 				'unused-imports/no-unused-vars': [
 					'error',
@@ -98,7 +99,6 @@ export async function svelte(
 							'style/no-trailing-spaces': 'off',
 							'svelte/derived-has-same-inputs-outputs': 'error',
 							'svelte/html-closing-bracket-spacing': 'error',
-							'svelte/html-quotes': ['error', { prefer: quotes === 'backtick' ? 'double' : quotes }],
 							'svelte/indent': ['error', { alignAttributesVertically: true, indent }],
 							'svelte/mustache-spacing': 'error',
 							'svelte/no-spaces-around-equal-signs-in-attribute': 'error',
