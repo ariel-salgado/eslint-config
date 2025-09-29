@@ -95,7 +95,7 @@
     "svelte-eslint-parser": "catalog:parsers",
     "tailwindcss": "catalog:dev",
     "tsdown": "catalog:dev",
-    "tsx": "catalog:dev",
+    "tsx": "^4.20.6",
     "typescript": "catalog:dev"
   }
 }
