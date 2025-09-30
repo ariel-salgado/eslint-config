@@ -34,9 +34,9 @@ export async function jsdoc(options: OptionsStylistic = {}): Promise<TypedFlatCo
 
 				...stylistic
 					? {
-						'jsdoc/check-alignment': 'warn',
-						'jsdoc/multiline-blocks': 'warn',
-					}
+							'jsdoc/check-alignment': 'warn',
+							'jsdoc/multiline-blocks': 'warn',
+						}
 					: {},
 			},
 		},

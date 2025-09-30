@@ -21,7 +21,7 @@ export interface OptionsFiles {
 
 export type OptionsTypescript
 	= (OptionsTypeScriptWithTypes & OptionsOverrides)
-	| (OptionsTypeScriptParserOptions & OptionsOverrides);
+		| (OptionsTypeScriptParserOptions & OptionsOverrides);
 
 export interface OptionsComponentExts {
 	componentExts?: string[];

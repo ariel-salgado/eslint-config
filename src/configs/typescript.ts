@@ -82,12 +82,12 @@ export async function typescript(
 					sourceType: 'module',
 					...type_aware
 						? {
-							projectService: {
-								allowDefaultProject: ['./*.js'],
-								defaultProject: tsconfig_path,
-							},
-							tsconfigRootDir: process.cwd(),
-						}
+								projectService: {
+									allowDefaultProject: ['./*.js'],
+									defaultProject: tsconfig_path,
+								},
+								tsconfigRootDir: process.cwd(),
+							}
 						: {},
 					...parserOptions,
 				},
@@ -106,12 +106,12 @@ export async function typescript(
 		},
 		...is_type_aware
 			? [
-				make_parser(false, files),
-				make_parser(true, files_type_aware, ignores_type_aware),
-			]
+					make_parser(false, files),
+					make_parser(true, files_type_aware, ignores_type_aware),
+				]
 			: [
-				make_parser(false, files),
-			],
+					make_parser(false, files),
+				],
 		{
 			files,
 			name: 'ariel/typescript/rules',
@@ -161,12 +161,12 @@ export async function typescript(
 
 				...(type === 'lib'
 					? {
-						'ts/explicit-function-return-type': ['error', {
-							allowExpressions: true,
-							allowHigherOrderFunctions: true,
-							allowIIFEs: true,
-						}],
-					}
+							'ts/explicit-function-return-type': ['error', {
+								allowExpressions: true,
+								allowHigherOrderFunctions: true,
+								allowIIFEs: true,
+							}],
+						}
 					: {}
 				),
 				...overrides,
@@ -174,14 +174,14 @@ export async function typescript(
 		},
 		...is_type_aware
 			? [{
-				files: files_type_aware,
-				ignores: ignores_type_aware,
-				name: 'ariel/typescript/rules-type-aware',
-				rules: {
-					...type_aware_rules,
-					...overridesTypeAware,
-				},
-			}]
+					files: files_type_aware,
+					ignores: ignores_type_aware,
+					name: 'ariel/typescript/rules-type-aware',
+					rules: {
+						...type_aware_rules,
+						...overridesTypeAware,
+					},
+				}]
 			: [],
 	];
 }

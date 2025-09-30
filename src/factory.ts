@@ -132,12 +132,12 @@ export function ariel(
 		configs.push(
 			imports(enable_imports === true
 				? {
-					stylistic: stylistic_options,
-				}
+						stylistic: stylistic_options,
+					}
 				: {
-					stylistic: stylistic_options,
-					...enable_imports,
-				}),
+						stylistic: stylistic_options,
+						...enable_imports,
+					}),
 		);
 	}
 
