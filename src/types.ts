@@ -1,5 +1,5 @@
 import type { Linter } from 'eslint';
-import type { RuleOptions } from './typegen';
+import type { ConfigNames, RuleOptions } from './typegen';
 import type { ParserOptions } from '@typescript-eslint/parser';
 import type { FlatGitignoreOptions } from 'eslint-config-flat-gitignore';
 import type { StylisticCustomizeOptions } from '@stylistic/eslint-plugin';
@@ -8,13 +8,19 @@ export type Awaitable<T> = T | Promise<T>;
 
 export type Rules = Record<string, Linter.RuleEntry<any> | undefined> & RuleOptions;
 
+export type { ConfigNames };
+
 export type TypedFlatConfigItem = Omit<Linter.Config, 'plugins' | 'rules'> & {
 	plugins?: Record<string, any>;
 	rules?: Rules;
 };
 
+export interface OptionsFiles {
+	files?: string[];
+}
+
 export type OptionsTypescript
-= (OptionsTypeScriptWithTypes & OptionsOverrides)
+	= (OptionsTypeScriptWithTypes & OptionsOverrides)
 	| (OptionsTypeScriptParserOptions & OptionsOverrides);
 
 export interface OptionsComponentExts {
@@ -25,8 +31,19 @@ export interface OptionsUnicorn extends OptionsOverrides {
 	allRecommended?: boolean;
 }
 
-export interface OptionsFiles {
-	files?: string[];
+export interface OptionsTypeScriptParserOptions {
+	parserOptions?: Partial<ParserOptions>;
+	filesTypeAware?: string[];
+	ignoresTypeAware?: string[];
+};
+
+export interface OptionsTypeScriptWithTypes {
+	tsconfigPath?: string;
+	overridesTypeAware?: TypedFlatConfigItem['rules'];
+}
+
+export interface OptionsHasTypeScript {
+	typescript?: boolean;
 }
 
 export interface OptionsStylistic {
@@ -37,7 +54,11 @@ export interface StylisticConfig
 	extends Pick<StylisticCustomizeOptions, 'indent' | 'quotes' | 'semi'> {
 }
 
-export interface StylisticOptions extends StylisticConfig, OptionsOverrides {};
+export interface StylisticOptions extends StylisticConfig, OptionsOverrides { };
+
+export interface OptionsHasTailwindCSS {
+	tailwindcss?: boolean;
+}
 
 export interface TailwindCSSOptions extends OptionsOverrides {
 	entryPoint?: string;
@@ -53,25 +74,6 @@ export interface OptionsProjectType {
 
 export interface OptionsRegExp {
 	level?: 'error' | 'warn';
-}
-
-export interface OptionsHasTypeScript {
-	typescript?: boolean;
-}
-
-export interface OptionsHasTailwindCSS {
-	tailwindcss?: boolean;
-}
-
-export interface OptionsTypeScriptParserOptions {
-	parserOptions?: Partial<ParserOptions>;
-	filesTypeAware?: string[];
-	ignoresTypeAware?: string[];
-};
-
-export interface OptionsTypeScriptWithTypes {
-	tsconfigPath?: string;
-	OverridesTypeAware?: TypedFlatConfigItem['rules'];
 }
 
 export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType {
@@ -199,12 +201,6 @@ export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType 
 	pnpm?: boolean;
 
 	/**
-	 * Control to disable some rules in editors.
-	 * @default auto-detect based on the process.env
-	 */
-	isInEditor?: boolean;
-
-	/**
 	 * Automatically rename plugins in the config.
 	 *
 	 * @default true
@@ -221,12 +217,11 @@ export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType 
 		javascript?: TypedFlatConfigItem['rules'];
 		typescript?: TypedFlatConfigItem['rules'];
 		test?: TypedFlatConfigItem['rules'];
-		vue?: TypedFlatConfigItem['rules'];
 		jsonc?: TypedFlatConfigItem['rules'];
 		markdown?: TypedFlatConfigItem['rules'];
 		yaml?: TypedFlatConfigItem['rules'];
 		toml?: TypedFlatConfigItem['rules'];
-		react?: TypedFlatConfigItem['rules'];
 		svelte?: TypedFlatConfigItem['rules'];
+		tailwindcss?: TypedFlatConfigItem['rules'];
 	};
 }
