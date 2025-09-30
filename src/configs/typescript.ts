@@ -20,7 +20,7 @@ export async function typescript(
 	const {
 		componentExts = [],
 		overrides = {},
-		OverridesTypeAware = {},
+		overridesTypeAware = {},
 		parserOptions = {},
 		type = 'app',
 	} = options;
@@ -82,14 +82,14 @@ export async function typescript(
 					sourceType: 'module',
 					...type_aware
 						? {
-								projectService: {
-									allowDefaultProject: ['./*.js'],
-									defaultProject: tsconfig_path,
-								},
-								tsconfigRootDir: process.cwd(),
-							}
+							projectService: {
+								allowDefaultProject: ['./*.js'],
+								defaultProject: tsconfig_path,
+							},
+							tsconfigRootDir: process.cwd(),
+						}
 						: {},
-					...parserOptions as any,
+					...parserOptions,
 				},
 			},
 			name: `ariel/typescript/${type_aware ? 'type-aware-parser' : 'parser'}`,
@@ -98,25 +98,23 @@ export async function typescript(
 
 	return [
 		{
-			// Install the plugins without globs, so they can be configured separately.
 			name: 'ariel/typescript/setup',
 			plugins: {
 				ariel: plugin_ariel,
-				ts: plugin_ts as any,
+				ts: plugin_ts,
 			},
 		},
-		// assign type-aware parser for type-aware files and type-unaware parser for the rest
 		...is_type_aware
 			? [
-					make_parser(false, files),
-					make_parser(true, files_type_aware, ignores_type_aware),
-				]
+				make_parser(false, files),
+				make_parser(true, files_type_aware, ignores_type_aware),
+			]
 			: [
-					make_parser(false, files),
-				],
+				make_parser(false, files),
+			],
 		{
 			files,
-			name: 'ariel/typescript',
+			name: 'ariel/typescript/rules',
 			rules: {
 				...rename_rules(
 					plugin_ts.configs['eslint-recommended'].overrides![0].rules!,
@@ -129,7 +127,7 @@ export async function typescript(
 				'no-dupe-class-members': 'off',
 				'no-redeclare': 'off',
 				'no-use-before-define': 'off',
-				'no-useless-constructor': 'off',
+				'no-useless-constructor': 'error',
 				'ts/ban-ts-comment': ['error', { 'ts-expect-error': 'allow-with-description' }],
 				'ts/consistent-type-definitions': ['error', 'interface'],
 				'ts/consistent-type-imports': ['error', {
@@ -138,7 +136,7 @@ export async function typescript(
 					prefer: 'type-imports',
 				}],
 
-				'ts/method-signature-style': ['error', 'property'], // https://www.totaltypescript.com/method-shorthand-syntax-considered-harmful
+				'ts/method-signature-style': ['error', 'property'],
 				'ts/no-dupe-class-members': 'error',
 				'ts/no-dynamic-delete': 'off',
 				'ts/no-empty-object-type': ['error', { allowInterfaces: 'always' }],
@@ -163,12 +161,12 @@ export async function typescript(
 
 				...(type === 'lib'
 					? {
-							'ts/explicit-function-return-type': ['error', {
-								allowExpressions: true,
-								allowHigherOrderFunctions: true,
-								allowIIFEs: true,
-							}],
-						}
+						'ts/explicit-function-return-type': ['error', {
+							allowExpressions: true,
+							allowHigherOrderFunctions: true,
+							allowIIFEs: true,
+						}],
+					}
 					: {}
 				),
 				...overrides,
@@ -176,14 +174,14 @@ export async function typescript(
 		},
 		...is_type_aware
 			? [{
-					files: files_type_aware,
-					ignores: ignores_type_aware,
-					name: 'ariel/typescript/rules-type-aware',
-					rules: {
-						...type_aware_rules,
-						...OverridesTypeAware,
-					},
-				}]
+				files: files_type_aware,
+				ignores: ignores_type_aware,
+				name: 'ariel/typescript/rules-type-aware',
+				rules: {
+					...type_aware_rules,
+					...overridesTypeAware,
+				},
+			}]
 			: [],
 	];
 }

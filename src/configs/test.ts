@@ -3,7 +3,6 @@ import type { OptionsFiles, OptionsOverrides, TypedFlatConfigItem } from '../typ
 import { GLOB_TESTS } from '../globs';
 import { interop_default } from '../utils';
 
-// Hold the reference so we don't redeclare the plugin on each call
 let _plugin_test: any;
 
 export async function test(
@@ -16,7 +15,7 @@ export async function test(
 
 	const [
 		plugin_vitest,
-		plugin_no_oly_tests,
+		plugin_no_only_tests,
 	] = await Promise.all([
 		interop_default(import('@vitest/eslint-plugin')),
 		// @ts-expect-error missing types
@@ -27,7 +26,7 @@ export async function test(
 		...plugin_vitest,
 		rules: {
 			...plugin_vitest.rules,
-			...plugin_no_oly_tests.rules,
+			...plugin_no_only_tests.rules,
 		},
 	};
 
@@ -40,7 +39,7 @@ export async function test(
 		},
 		{
 			files,
-			name: 'ariel/test',
+			name: 'ariel/test/rules',
 			rules: {
 				'test/consistent-test-it': ['error', { fn: 'it', withinDescribe: 'it' }],
 				'test/no-identical-title': 'error',

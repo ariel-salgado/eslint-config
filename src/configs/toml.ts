@@ -17,8 +17,8 @@ export async function toml(
 	} = typeof stylistic === 'boolean' ? {} : stylistic;
 
 	const [
-		pluginToml,
-		parserToml,
+		plugin_toml,
+		parser_toml,
 	] = await Promise.all([
 		interop_default(import('eslint-plugin-toml')),
 		interop_default(import('toml-eslint-parser')),
@@ -28,15 +28,15 @@ export async function toml(
 		{
 			name: 'ariel/toml/setup',
 			plugins: {
-				toml: pluginToml,
+				toml: plugin_toml,
 			},
 		},
 		{
 			files,
 			languageOptions: {
-				parser: parserToml,
+				parser: parser_toml,
 			},
-			name: 'ariel/toml',
+			name: 'ariel/toml/rules',
 			rules: {
 				'style/spaced-comment': 'off',
 
@@ -52,18 +52,18 @@ export async function toml(
 
 				...stylistic
 					? {
-							'toml/array-bracket-newline': 'error',
-							'toml/array-bracket-spacing': 'error',
-							'toml/array-element-newline': 'error',
-							'toml/indent': ['error', indent === 'tab' ? 2 : indent],
-							'toml/inline-table-curly-spacing': 'error',
-							'toml/key-spacing': 'error',
-							'toml/padding-line-between-pairs': 'error',
-							'toml/padding-line-between-tables': 'error',
-							'toml/quoted-keys': 'error',
-							'toml/spaced-comment': 'error',
-							'toml/table-bracket-spacing': 'error',
-						}
+						'toml/array-bracket-newline': 'error',
+						'toml/array-bracket-spacing': 'error',
+						'toml/array-element-newline': 'error',
+						'toml/indent': ['error', indent === 'tab' ? 2 : indent],
+						'toml/inline-table-curly-spacing': 'error',
+						'toml/key-spacing': 'error',
+						'toml/padding-line-between-pairs': 'error',
+						'toml/padding-line-between-tables': 'error',
+						'toml/quoted-keys': 'error',
+						'toml/spaced-comment': 'error',
+						'toml/table-bracket-spacing': 'error',
+					}
 					: {},
 
 				...overrides,
