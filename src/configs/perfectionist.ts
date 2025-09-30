@@ -5,7 +5,7 @@ import { plugin_perfectionist } from '../plugins';
 export async function perfectionist(): Promise<TypedFlatConfigItem[]> {
 	return [
 		{
-			name: 'ariel/perfectionist',
+			name: 'ariel/perfectionist/setup',
 			plugins: {
 				perfectionist: plugin_perfectionist,
 			},
@@ -64,8 +64,8 @@ export async function perfectionist(): Promise<TypedFlatConfigItem[]> {
 						sortSideEffects: true,
 					},
 				],
+				'perfectionist/sort-named-imports': ['error', { order: 'asc', type: 'line-length' }],
 				'perfectionist/sort-named-exports': ['error', { order: 'asc', type: 'line-length' }],
-				'no-duplicate-imports': 'off',
 			},
 		},
 	];

@@ -13,7 +13,6 @@ export async function tailwindcss(
 	} = options;
 
 	await ensure_packages([
-		'tailwindcss',
 		'eslint-plugin-better-tailwindcss',
 	]);
 
@@ -21,15 +20,27 @@ export async function tailwindcss(
 
 	return [
 		{
-			name: 'ariel/tailwindcss',
+			name: 'ariel/tailwindcss/setup',
 			plugins: {
 				tailwindcss: plugin_tailwindcss,
 			},
+		},
+		{
 			files,
+			name: 'ariel/tailwindcss/rules',
 			rules: {
 				...plugin_tailwindcss.configs.recommended.rules,
-				'tailwindcss/enforce-consistent-line-wrapping': 'off',
+				'tailwindcss/enforce-consistent-line-wrapping': [
+					'error',
+					{
+						group: 'newLine',
+						preferSingleLine: true,
+						printWidth: 80,
+					},
+				],
+				'enforce-consistent-important-position': 'error',
 				'tailwindcss/enforce-shorthand-classes': 'error',
+				'no-deprecated-classes': 'error',
 				'tailwindcss/no-unregistered-classes': [
 					'error',
 					{
