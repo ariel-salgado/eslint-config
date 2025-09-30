@@ -18,7 +18,7 @@ catalogs:
     svelte: ^5.39.6
     tailwindcss: ^4.1.13
     tsdown: ^0.15.5
-    tsx: ^4.20.5
+    tsx: ^4.20.6
     typescript: ~5.9.2
   parsers:
     jsonc-eslint-parser: ^2.4.1

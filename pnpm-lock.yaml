@@ -49,6 +49,9 @@ catalogs:
     tsdown:
       specifier: ^0.15.5
       version: 0.15.5
+    tsx:
+      specifier: ^4.20.6
+      version: 4.20.6
     typescript:
       specifier: ~5.9.2
       version: 5.9.2
@@ -265,7 +268,7 @@ importers:
         specifier: catalog:dev
         version: 0.15.5(@typescript/native-preview@7.0.0-dev.20250929.1)(typescript@5.9.2)
       tsx:
-        specifier: ^4.20.6
+        specifier: catalog:dev
         version: 4.20.6
       typescript:
         specifier: catalog:dev
