@@ -10,7 +10,6 @@ export function has_svelte(): boolean {
 	return (
 		isPackageExists('svelte')
 		|| isPackageExists('@sveltejs/kit')
-		|| isPackageExists('eslint-plugin-svelte')
 	);
 }
 
