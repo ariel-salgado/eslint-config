@@ -15,13 +15,16 @@ export async function javascript(options: OptionsOverrides = {}): Promise<TypedF
 				ecmaVersion: 'latest',
 				globals: {
 					...globals.browser,
-					...globals.es2025,
+					...globals.es2026,
 					...globals.node,
 					document: 'readonly',
 					navigator: 'readonly',
 					window: 'readonly',
 				},
 				parserOptions: {
+					ecmaFeatures: {
+						jsx: true,
+					},
 					ecmaVersion: 'latest',
 					sourceType: 'module',
 				},
@@ -33,7 +36,7 @@ export async function javascript(options: OptionsOverrides = {}): Promise<TypedF
 			name: 'ariel/javascript/setup',
 		},
 		{
-			name: 'ariel/javascript',
+			name: 'ariel/javascript/rules',
 			plugins: {
 				'ariel': plugin_ariel,
 				'unused-imports': plugin_unused_imports,

@@ -21,7 +21,7 @@ export async function regexp(
 	return [
 		{
 			...config,
-			name: 'ariel/regexp',
+			name: 'ariel/regexp/rules',
 			rules: {
 				...rules,
 				...options.overrides,

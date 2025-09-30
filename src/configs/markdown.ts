@@ -2,7 +2,7 @@ import type { OptionsFiles, OptionsOverrides, TypedFlatConfigItem, OptionsCompon
 
 import { mergeProcessors, processorPassThrough } from 'eslint-merge-processors';
 
-import { parserPlain, interop_default } from '../utils';
+import { parser_plain, interop_default } from '../utils';
 import { GLOB_MARKDOWN, GLOB_MARKDOWN_CODE, GLOB_MARKDOWN_IN_MARKDOWN } from '../globs';
 
 export async function markdown(
@@ -27,9 +27,6 @@ export async function markdown(
 			files,
 			ignores: [GLOB_MARKDOWN_IN_MARKDOWN],
 			name: 'ariel/markdown/processor',
-			// `eslint-plugin-markdown` only creates virtual files for code blocks,
-			// but not the markdown file itself. We use `eslint-merge-processors` to
-			// add a pass-through processor for the markdown file itself.
 			processor: mergeProcessors([
 				markdown.processors!.markdown,
 				processorPassThrough,
@@ -38,7 +35,7 @@ export async function markdown(
 		{
 			files,
 			languageOptions: {
-				parser: parserPlain,
+				parser: parser_plain,
 			},
 			name: 'ariel/markdown/parser',
 		},
@@ -54,7 +51,7 @@ export async function markdown(
 					},
 				},
 			},
-			name: 'ariel/markdown',
+			name: 'ariel/markdown/disables',
 			rules: {
 				'no-alert': 'off',
 				'no-console': 'off',

@@ -5,7 +5,7 @@ import { plugin_morgan } from '../plugins';
 export async function morgan(): Promise<TypedFlatConfigItem[]> {
 	return [
 		{
-			name: 'ariel/morgan',
+			name: 'ariel/morgan/rules',
 			plugins: {
 				morgan: plugin_morgan,
 			},

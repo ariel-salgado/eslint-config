@@ -10,7 +10,7 @@ export async function imports(options: OptionsOverrides & OptionsStylistic = {})
 
 	return [
 		{
-			name: 'ariel/imports',
+			name: 'ariel/imports/rules',
 			plugins: {
 				ariel: plugin_ariel,
 				import: plugin_import,
@@ -29,8 +29,8 @@ export async function imports(options: OptionsOverrides & OptionsStylistic = {})
 
 				...stylistic
 					? {
-							'import/newline-after-import': ['error', { count: 1 }],
-						}
+						'import/newline-after-import': ['error', { count: 1 }],
+					}
 					: {},
 
 				...overrides,
