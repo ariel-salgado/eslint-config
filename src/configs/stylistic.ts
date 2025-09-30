@@ -29,11 +29,11 @@ export async function stylistic(
 		pluginName: 'style',
 		quotes,
 		semi,
-	});
+	}) as TypedFlatConfigItem;
 
 	return [
 		{
-			name: 'ariel/stylistic',
+			name: 'ariel/stylistic/rules',
 			plugins: {
 				ariel: plugin_ariel,
 				style: plugin_stylistic,
@@ -44,6 +44,8 @@ export async function stylistic(
 				'ariel/consistent-chaining': 'error',
 				'ariel/consistent-list-newline': 'error',
 				'ariel/if-newline': 'error',
+				'ariel/curly': 'error',
+
 				'style/generator-star-spacing': ['error', { after: true, before: false }],
 				'style/yield-star-spacing': ['error', { after: true, before: false }],
 
