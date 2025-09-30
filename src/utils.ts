@@ -6,7 +6,7 @@ import { isPackageExists } from 'local-pkg';
 const scope_url = fileURLToPath(new URL('.', import.meta.url));
 const is_cwd_in_scope = isPackageExists('@ariel/eslint-config');
 
-export const parserPlain = {
+export const parser_plain = {
 	meta: {
 		name: 'parser-plain',
 	},
@@ -48,9 +48,36 @@ export function rename_rules(
 	);
 }
 
+export function rename_plugin_in_configs(configs: TypedFlatConfigItem[], map: Record<string, string>): TypedFlatConfigItem[] {
+	return configs.map((i) => {
+		const clone = { ...i };
+		if (clone.rules)
+			clone.rules = rename_rules(clone.rules, map);
+		if (clone.plugins) {
+			clone.plugins = Object.fromEntries(
+				Object.entries(clone.plugins)
+					.map(([key, value]) => {
+						if (key in map)
+							return [map[key], value];
+						return [key, value];
+					}),
+			);
+		}
+		return clone;
+	});
+}
+
+export function to_array<T>(value: T | T[]): T[] {
+	return Array.isArray(value) ? value : [value];
+}
+
 export async function interop_default<T>(m: Awaitable<T>): Promise<T extends { default: infer U } ? U : T> {
 	const resolved = await m;
 	return (resolved as any).default || resolved;
+}
+
+export function is_package_in_scope(name: string): boolean {
+	return isPackageExists(name, { paths: [scope_url] });
 }
 
 export async function ensure_packages(packages: (string | undefined)[]): Promise<void> {
@@ -67,8 +94,4 @@ export async function ensure_packages(packages: (string | undefined)[]): Promise
 	});
 	if (result)
 		await import('@antfu/install-pkg').then(i => i.installPackage(non_existing_packages, { dev: true }));
-}
-
-export function is_package_in_scope(name: string): boolean {
-	return isPackageExists(name, { paths: [scope_url] });
 }
