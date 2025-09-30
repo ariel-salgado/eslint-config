@@ -43,11 +43,11 @@ export async function svelte(
 				parserOptions: {
 					extraFileExtensions: ['.svelte'],
 					parser: options.typescript
-						? await interop_default(import('@typescript-eslint/parser')) as any
+						? await interop_default(import('@typescript-eslint/parser'))
 						: null,
 				},
 			},
-			name: 'ariel/svelte',
+			name: 'ariel/svelte/rules',
 			processor: plugin_svelte.processors['.svelte'],
 			rules: {
 				'no-undef': 'off',
@@ -66,7 +66,6 @@ export async function svelte(
 				'svelte/no-dupe-else-if-blocks': 'error',
 				'svelte/no-dupe-style-properties': 'error',
 				'svelte/no-dupe-use-directives': 'error',
-				'svelte/no-dynamic-slot-name': 'error',
 				'svelte/no-export-load-in-svelte-module-in-kit-pages': 'error',
 				'svelte/no-inner-declarations': 'error',
 				'svelte/no-not-function-handler': 'error',
@@ -81,7 +80,6 @@ export async function svelte(
 				'svelte/sort-attributes': 'error',
 				'svelte/system': 'error',
 				'svelte/valid-each-key': 'error',
-				'svelte/html-quotes': ['error', { prefer: quotes === 'backtick' ? 'single' : quotes }],
 
 				'unused-imports/no-unused-vars': [
 					'error',
@@ -95,16 +93,17 @@ export async function svelte(
 
 				...stylistic
 					? {
-							'style/indent': 'off',
-							'style/no-trailing-spaces': 'off',
-							'svelte/derived-has-same-inputs-outputs': 'error',
-							'svelte/html-closing-bracket-spacing': 'error',
-							'svelte/indent': ['error', { alignAttributesVertically: true, indent }],
-							'svelte/mustache-spacing': 'error',
-							'svelte/no-spaces-around-equal-signs-in-attribute': 'error',
-							'svelte/no-trailing-spaces': 'error',
-							'svelte/spaced-html-comment': 'error',
-						}
+						'style/indent': 'off',
+						'style/no-trailing-spaces': 'off',
+						'svelte/derived-has-same-inputs-outputs': 'error',
+						'svelte/html-closing-bracket-spacing': 'error',
+						'svelte/html-quotes': ['error', { prefer: quotes === 'backtick' ? 'single' : quotes }],
+						'svelte/indent': ['error', { alignAttributesVertically: true, indent }],
+						'svelte/mustache-spacing': 'error',
+						'svelte/no-spaces-around-equal-signs-in-attribute': 'error',
+						'svelte/no-trailing-spaces': 'error',
+						'svelte/spaced-html-comment': 'error',
+					}
 					: {},
 
 				...overrides,
