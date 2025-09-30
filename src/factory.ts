@@ -2,10 +2,8 @@ import type { Linter } from 'eslint';
 import type { RuleOptions, ConfigNames } from './typegen';
 import type { Awaitable, OptionsConfig, TypedFlatConfigItem } from './types';
 
-import { isPackageExists } from 'local-pkg';
 import { FlatConfigComposer } from 'eslint-flat-config-utils';
 
-import { GLOB_SVELTE } from './globs';
 import { interop_default } from './utils';
 import { has_svelte, has_tailwindcss, is_in_editor_env } from './env';
 import {
@@ -73,21 +71,19 @@ export function ariel(
 		componentExts = [],
 		gitignore: enable_git_ignore = true,
 		imports: enable_imports = true,
-		pnpm: enable_catalogs = false, // TODO: smart detect
+		pnpm: enable_catalogs = false,
 		regexp: enable_regexp = true,
 		svelte: enable_svelte = has_svelte(),
 		tailwindcss: enable_tailwindcss = has_tailwindcss(),
-		typescript: enable_typescript = isPackageExists('typescript'),
+		typescript: enable_typescript = has_tailwindcss(),
 		unicorn: enable_unicorn = true,
 	} = options;
 
-	let is_in_editor = options.isInEditor;
+	const is_in_editor = is_in_editor_env();
 
-	if (is_in_editor == null) {
-		is_in_editor = is_in_editor_env();
-		if (is_in_editor)
-			// eslint-disable-next-line no-console
-			console.log('[@ariel/eslint-config] Detected running in editor, some rules are disabled.');
+	if (is_in_editor) {
+		// eslint-disable-next-line no-console
+		console.log('[@ariel-salgado/eslint-config] Detected running in editor, some rules are disabled.');
 	}
 
 	const stylistic_options = options.stylistic === false
@@ -113,38 +109,6 @@ export function ariel(
 		}
 	}
 
-	const extracted_tailwindcss_rules: Record<string, any> = {};
-	const cleaned_user_configs: typeof userConfigs = [];
-
-	for (const config of userConfigs) {
-		if (config && typeof config === 'object' && 'rules' in config) {
-			const { rules, ...restConfig } = config;
-			const nonTailwindcssRules: Record<string, any> = {};
-
-			if (rules) {
-				for (const [ruleName, ruleConfig] of Object.entries(rules)) {
-					if (ruleName.startsWith('tailwindcss/')) {
-						extracted_tailwindcss_rules[ruleName] = ruleConfig;
-					}
-					else {
-						nonTailwindcssRules[ruleName] = ruleConfig;
-					}
-				}
-			}
-
-			// Only add back the config if it has non-tailwindcss rules or other properties
-			if (Object.keys(nonTailwindcssRules).length > 0 || Object.keys(restConfig).length > 0) {
-				cleaned_user_configs.push({
-					...restConfig,
-					...(Object.keys(nonTailwindcssRules).length > 0 ? { rules: nonTailwindcssRules } : {}),
-				});
-			}
-		}
-		else {
-			cleaned_user_configs.push(config);
-		}
-	}
-
 	const typescript_options = resolve_sub_options(options, 'typescript');
 
 	configs.push(
@@ -160,8 +124,6 @@ export function ariel(
 		imports({
 			stylistic: stylistic_options,
 		}),
-
-		// Optional plugins (installed but not enabled by default)
 		perfectionist(),
 		morgan(),
 	);
@@ -170,12 +132,12 @@ export function ariel(
 		configs.push(
 			imports(enable_imports === true
 				? {
-						stylistic: stylistic_options,
-					}
+					stylistic: stylistic_options,
+				}
 				: {
-						stylistic: stylistic_options,
-						...enable_imports,
-					}),
+					stylistic: stylistic_options,
+					...enable_imports,
+				}),
 		);
 	}
 
@@ -220,12 +182,6 @@ export function ariel(
 	if (enable_tailwindcss) {
 		configs.push(tailwindcss({
 			overrides: get_overrides(options, 'tailwindcss'),
-			...(enable_svelte
-				? {
-						files: [GLOB_SVELTE],
-						entryPoint: 'src/app.css',
-					}
-				: {}),
 		}));
 	}
 
@@ -276,11 +232,9 @@ export function ariel(
 	);
 
 	if ('files' in options) {
-		throw new Error('[@ariel/eslint-config] The first argument should not contain the "files" property as the options are supposed to be global. Place it in the second or later config instead.');
+		throw new Error('[@ariel-salgado/eslint-config] The first argument should not contain the "files" property as the options are supposed to be global. Place it in the second or later config instead.');
 	}
 
-	// User can optionally pass a flat config item to the first argument
-	// We pick the known keys as ESLint would do schema validation
 	const merged_config = flat_config_props.reduce((acc, key) => {
 		if (key in options)
 			acc[key] = options[key] as any;
@@ -294,7 +248,7 @@ export function ariel(
 	composer = composer
 		.append(
 			...configs,
-			...cleaned_user_configs as any,
+			...userConfigs as any,
 		);
 
 	if (autoRenamePlugins) {
