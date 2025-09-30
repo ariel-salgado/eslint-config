@@ -7,3 +7,15 @@ indent_style = tab
 indent_size = 4
 charset = utf-8
 trim_trailing_whitespace = true
+
+[*.json]
+indent_style = space
+indent_size = 2
+
+[*.yml]
+indent_style = space
+indent_size = 2
+
+[*.yaml]
+indent_style = space
+indent_size = 2
