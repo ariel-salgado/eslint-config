@@ -33,9 +33,9 @@ export async function tailwindcss(
 				'tailwindcss/enforce-consistent-line-wrapping': [
 					'error',
 					{
-						group: 'newLine',
+						group: 'never',
 						preferSingleLine: true,
-						printWidth: 80,
+						printWidth: 100,
 					},
 				],
 				'tailwindcss/enforce-consistent-important-position': 'error',
