@@ -1,7 +1,7 @@
 {
   "name": "@ariel-salgado/eslint-config",
   "type": "module",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "packageManager": "pnpm@10.18.0",
   "description": "ESLint config for @ariel-salgado.",
   "author": "Ariel Salgado <ariel.salgado.acevedo@gmail.com>",
