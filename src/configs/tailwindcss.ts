@@ -40,7 +40,7 @@ export async function tailwindcss(
 				],
 				'tailwindcss/enforce-consistent-important-position': 'error',
 				'tailwindcss/enforce-shorthand-classes': 'error',
-				'no-deprecated-classes': 'error',
+				'tailwindcss/no-deprecated-classes': 'error',
 				'tailwindcss/no-unregistered-classes': [
 					'error',
 					{
