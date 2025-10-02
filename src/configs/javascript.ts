@@ -70,7 +70,7 @@ export async function javascript(options: OptionsOverrides = {}): Promise<TypedF
 				'no-dupe-class-members': 'error',
 				'no-dupe-keys': 'error',
 				'no-duplicate-case': 'error',
-				'no-duplicate-imports': 'error',
+				'no-duplicate-imports': 'off',
 				'no-empty': ['error', { allowEmptyCatch: true }],
 				'no-empty-character-class': 'error',
 				'no-empty-pattern': 'error',
