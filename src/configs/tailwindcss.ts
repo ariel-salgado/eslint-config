@@ -38,7 +38,7 @@ export async function tailwindcss(
 						printWidth: 80,
 					},
 				],
-				'enforce-consistent-important-position': 'error',
+				'tailwindcss/enforce-consistent-important-position': 'error',
 				'tailwindcss/enforce-shorthand-classes': 'error',
 				'no-deprecated-classes': 'error',
 				'tailwindcss/no-unregistered-classes': [
