@@ -30,6 +30,7 @@ export async function tailwindcss(
 			name: 'ariel/tailwindcss/rules',
 			rules: {
 				...plugin_tailwindcss.configs.recommended.rules,
+				'tailwindcss/enforce-consistent-line-wrapping': 'off',
 				'tailwindcss/enforce-consistent-important-position': 'error',
 				'tailwindcss/enforce-shorthand-classes': 'error',
 				'tailwindcss/no-deprecated-classes': 'error',
