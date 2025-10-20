@@ -5,7 +5,7 @@ import type { Awaitable, OptionsConfig, TypedFlatConfigItem } from './types';
 import { FlatConfigComposer } from 'eslint-flat-config-utils';
 
 import { interop_default } from './utils';
-import { has_svelte, has_tailwindcss, is_in_editor_env } from './env';
+import { has_svelte, has_typescript, has_tailwindcss, is_in_editor_env } from './env';
 import {
 	node,
 	pnpm,
@@ -45,7 +45,7 @@ const flat_config_props = [
 export const default_plugin_renaming = {
 	'@stylistic': 'style',
 	'@typescript-eslint': 'ts',
-	'better-tailwindcss': 'tailwindcss',
+	'better-tailwindcss': 'tailwind',
 	'import-lite': 'import',
 	'n': 'node',
 	'vitest': 'test',
@@ -75,7 +75,7 @@ export function ariel(
 		regexp: enable_regexp = true,
 		svelte: enable_svelte = has_svelte(),
 		tailwindcss: enable_tailwindcss = has_tailwindcss(),
-		typescript: enable_typescript = has_tailwindcss(),
+		typescript: enable_typescript = has_typescript(),
 		unicorn: enable_unicorn = true,
 	} = options;
 
