@@ -31,6 +31,7 @@
     "lint": "eslint",
     "lint:fix": "pnpm run lint --fix",
     "check": "tsc --noEmit",
+    "prepare": "simple-git-hooks",
     "release": "bumpp && pnpm publish",
     "prepublishOnly": "pnpm run build"
   },
@@ -91,11 +92,22 @@
     "eslint-plugin-better-tailwindcss": "catalog:plugins",
     "eslint-plugin-svelte": "catalog:plugins",
     "eslint-typegen": "catalog:dev",
+    "lint-staged": "catalog:dev",
+    "simple-git-hooks": "catalog:dev",
     "svelte": "catalog:dev",
     "svelte-eslint-parser": "catalog:parsers",
     "tailwindcss": "catalog:dev",
     "tsdown": "catalog:dev",
     "tsx": "catalog:dev",
     "typescript": "catalog:dev"
+  },
+  "resolutions": {
+    "eslint": "catalog:"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm exec lint-staged"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
   }
 }
