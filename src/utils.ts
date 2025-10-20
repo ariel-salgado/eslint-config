@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { isPackageExists } from 'local-pkg';
 
 const scope_url = fileURLToPath(new URL('.', import.meta.url));
-const is_cwd_in_scope = isPackageExists('@ariel/eslint-config');
+const is_cwd_in_scope = isPackageExists('@ariel-salgado/eslint-config');
 
 export const parser_plain = {
 	meta: {
