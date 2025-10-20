@@ -22,7 +22,9 @@ export function has_tailwindcss(): boolean {
 
 export function is_in_git_hooks_or_lint_staged(): boolean {
 	return !!(
-		process.env.GIT_PARAMS
+		// eslint-disable-next-line no-constant-binary-expression
+		false
+		|| process.env.GIT_PARAMS
 		|| process.env.VSCODE_GIT_COMMAND
 		|| process.env.npm_lifecycle_script?.startsWith('lint-staged')
 	);
@@ -36,7 +38,9 @@ export function is_in_editor_env(): boolean {
 		return false;
 
 	return !!(
-		process.env.VSCODE_PID
+		// eslint-disable-next-line no-constant-binary-expression
+		false
+		|| process.env.VSCODE_PID
 		|| process.env.VSCODE_CWD
 		|| process.env.JETBRAINS_IDE
 		|| process.env.VIM
