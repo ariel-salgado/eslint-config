@@ -6,7 +6,7 @@ import { plugin_ignore } from '../plugins';
 export async function ignores(ignores: string[] = []): Promise<TypedFlatConfigItem[]> {
 	return [
 		{
-			name: 'ariel/ignores',
+			name: 'ariel/global-ignores',
 			ignores: [
 				...GLOB_EXCLUDE,
 				...ignores,
