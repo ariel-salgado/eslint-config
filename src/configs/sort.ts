@@ -62,6 +62,7 @@ export async function sort_package_json(): Promise<TypedFlatConfigItem[]> {
 							'simple-git-hooks',
 							'lint-staged',
 							'eslintConfig',
+							'tsdown',
 						],
 						pathPattern: '^$',
 					},
