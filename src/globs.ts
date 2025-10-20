@@ -16,7 +16,7 @@ export const GLOB_JSONC = '**/*.jsonc';
 
 export const GLOB_MARKDOWN = '**/*.md';
 export const GLOB_MARKDOWN_IN_MARKDOWN = '**/*.md/*.md';
-export const GLOB_SVELTE = '**/*.svelte{,.ts,.js}';
+export const GLOB_SVELTE = '**/*.svelte?(.{js,ts})';
 export const GLOB_YAML = '**/*.y?(a)ml';
 export const GLOB_TOML = '**/*.toml';
 export const GLOB_XML = '**/*.xml';
