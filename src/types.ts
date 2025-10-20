@@ -56,6 +56,10 @@ export interface StylisticConfig
 
 export interface StylisticOptions extends StylisticConfig, OptionsOverrides { };
 
+export interface OptionsOverrides {
+	overrides?: TypedFlatConfigItem['rules'];
+}
+
 export interface OptionsHasTailwindCSS {
 	tailwindcss?: boolean;
 }
@@ -63,10 +67,6 @@ export interface OptionsHasTailwindCSS {
 export interface TailwindCSSOptions extends OptionsOverrides {
 	entryPoint?: string;
 };
-
-export interface OptionsOverrides {
-	overrides?: TypedFlatConfigItem['rules'];
-}
 
 export interface OptionsProjectType {
 	type?: 'app' | 'lib';
@@ -158,7 +158,7 @@ export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType 
 	 * @see https://eslint.style/
 	 * @default true
 	 */
-	stylistic?: boolean | (StylisticConfig & OptionsOverrides);
+	stylistic?: boolean | StylisticOptions;
 
 	/**
 	 * Enable regexp rules.

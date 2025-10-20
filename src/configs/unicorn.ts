@@ -7,6 +7,7 @@ export async function unicorn(options: OptionsUnicorn = {}): Promise<TypedFlatCo
 		allRecommended = false,
 		overrides = {},
 	} = options;
+
 	return [
 		{
 			name: 'ariel/unicorn/rules',
