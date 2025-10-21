@@ -45,7 +45,7 @@ const flat_config_props = [
 export const default_plugin_renaming = {
 	'@stylistic': 'style',
 	'@typescript-eslint': 'ts',
-	'better-tailwindcss': 'tailwind',
+	'better-tailwindcss': 'tailwindcss',
 	'import-lite': 'import',
 	'n': 'node',
 	'vitest': 'test',
