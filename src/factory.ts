@@ -182,6 +182,7 @@ export function ariel(
 	if (enable_tailwindcss) {
 		configs.push(tailwindcss({
 			overrides: get_overrides(options, 'tailwindcss'),
+			stylistic: stylistic_options,
 		}));
 	}
 
