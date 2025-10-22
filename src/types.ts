@@ -66,6 +66,7 @@ export interface OptionsHasTailwindCSS {
 
 export interface TailwindCSSOptions extends OptionsOverrides {
 	entryPoint?: string;
+	printWidth?: number;
 };
 
 export interface OptionsProjectType {
