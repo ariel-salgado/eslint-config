@@ -1,15 +1,16 @@
 import type { OptionsFiles, TailwindCSSOptions, TypedFlatConfigItem, OptionsHasTailwindCSS } from '../types';
 
-import { GLOB_SVELTE } from '../globs';
+import { GLOB_HTML, GLOB_SVELTE } from '../globs';
 import { ensure_packages, interop_default } from '../utils';
 
 export async function tailwindcss(
 	options: OptionsHasTailwindCSS & TailwindCSSOptions & OptionsFiles = {},
 ): Promise<TypedFlatConfigItem[]> {
 	const {
-		files = [GLOB_SVELTE],
+		files = [GLOB_HTML, GLOB_SVELTE],
 		overrides = {},
 		entryPoint = 'src/app.css',
+		printWidth = 80,
 	} = options;
 
 	await ensure_packages([
@@ -30,7 +31,12 @@ export async function tailwindcss(
 			name: 'ariel/tailwindcss/rules',
 			rules: {
 				...plugin_tailwindcss.configs.recommended.rules,
-				'tailwindcss/enforce-consistent-line-wrapping': 'off',
+				'tailwindcss/enforce-consistent-line-wrapping': [
+					'error',
+					{
+						printWidth,
+					},
+				],
 				'tailwindcss/enforce-consistent-important-position': 'error',
 				'tailwindcss/enforce-shorthand-classes': 'error',
 				'tailwindcss/no-deprecated-classes': 'error',
@@ -40,13 +46,13 @@ export async function tailwindcss(
 						detectComponentClasses: true,
 					},
 				],
+				...overrides,
 			},
 			settings: {
 				'better-tailwindcss': {
 					entryPoint,
 				},
 			},
-			...overrides,
 		},
 	];
 }
