@@ -12,7 +12,7 @@ catalog:
 catalogs:
   dev:
     '@types/node': ^24.9.1
-    '@typescript/native-preview': 7.0.0-dev.20251019.1
+    '@typescript/native-preview': 7.0.0-dev.20251021.1
     bumpp: ^10.3.1
     eslint-typegen: ^2.3.0
     lint-staged: ^16.2.5
