@@ -20,6 +20,25 @@ export function has_tailwindcss(): boolean {
 	);
 }
 
+export function has_react(): boolean {
+	return (
+		isPackageExists('react')
+		|| isPackageExists('react-dom')
+	);
+}
+
+export function has_nextjs(): boolean {
+	return (
+		isPackageExists('next')
+	);
+}
+
+export function has_solid(): boolean {
+	return (
+		isPackageExists('solid-js')
+	);
+}
+
 export function is_in_git_hooks_or_lint_staged(): boolean {
 	return !!(
 		// eslint-disable-next-line no-constant-binary-expression
