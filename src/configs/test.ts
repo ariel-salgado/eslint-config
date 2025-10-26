@@ -49,9 +49,13 @@ export async function test(
 				'test/prefer-hooks-in-order': 'error',
 				'test/prefer-lowercase-title': 'error',
 
-				'no-unused-expressions': 'off',
-				'node/prefer-global/process': 'off',
-				'ts/explicit-function-return-type': 'off',
+				// Disables
+				...{
+					'ariel/no-top-level-await': 'off',
+					'no-unused-expressions': 'off',
+					'node/prefer-global/process': 'off',
+					'ts/explicit-function-return-type': 'off',
+				},
 
 				...overrides,
 			},
