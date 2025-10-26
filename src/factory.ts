@@ -5,8 +5,9 @@ import type { Awaitable, OptionsConfig, TypedFlatConfigItem } from './types';
 import { FlatConfigComposer } from 'eslint-flat-config-utils';
 
 import { interop_default } from './utils';
-import { has_svelte, has_typescript, has_tailwindcss, is_in_editor_env } from './env';
+import { has_react, has_solid, has_svelte, has_nextjs, has_typescript, has_tailwindcss, is_in_editor_env } from './env';
 import {
+	jsx,
 	node,
 	pnpm,
 	test,
@@ -14,9 +15,12 @@ import {
 	yaml,
 	jsdoc,
 	jsonc,
+	react,
+	solid,
 	morgan,
 	regexp,
 	svelte,
+	nextjs,
 	ignores,
 	imports,
 	unicorn,
@@ -43,6 +47,11 @@ const flat_config_props = [
 ] satisfies (keyof TypedFlatConfigItem)[];
 
 export const default_plugin_renaming = {
+	'@eslint-react': 'react',
+	'@eslint-react/dom': 'react-dom',
+	'@eslint-react/hooks-extra': 'react-hooks-extra',
+	'@eslint-react/naming-convention': 'react-naming-convention',
+	'@next/next': 'next',
 	'@stylistic': 'style',
 	'@typescript-eslint': 'ts',
 	'better-tailwindcss': 'tailwindcss',
@@ -71,8 +80,12 @@ export function ariel(
 		componentExts = [],
 		gitignore: enable_git_ignore = true,
 		imports: enable_imports = true,
+		jsx: enable_jsx = true,
+		nextjs: enable_nextjs = has_nextjs(),
 		pnpm: enable_catalogs = false,
+		react: enable_react = has_react(),
 		regexp: enable_regexp = true,
+		solid: enable_solid = has_solid(),
 		svelte: enable_svelte = has_svelte(),
 		tailwindcss: enable_tailwindcss = has_tailwindcss(),
 		typescript: enable_typescript = has_typescript(),
@@ -92,6 +105,9 @@ export function ariel(
 			? options.stylistic
 			: {};
 
+	if (stylistic_options && !('jsx' in stylistic_options))
+		stylistic_options.jsx = typeof enable_jsx === 'object' ? true : enable_jsx;
+
 	const configs: Awaitable<TypedFlatConfigItem[]>[] = [];
 
 	if (enable_git_ignore) {
@@ -110,6 +126,7 @@ export function ariel(
 	}
 
 	const typescript_options = resolve_sub_options(options, 'typescript');
+	const tsconfig_path = 'tsconfigPath' in typescript_options ? typescript_options.tsconfigPath : undefined;
 
 	configs.push(
 		ignores(options.ignores),
@@ -145,6 +162,10 @@ export function ariel(
 		configs.push(unicorn(enable_unicorn === true ? {} : enable_unicorn));
 	}
 
+	if (enable_jsx) {
+		configs.push(jsx(enable_jsx === true ? {} : enable_jsx));
+	}
+
 	if (enable_typescript) {
 		configs.push(typescript({
 			...typescript_options,
@@ -168,6 +189,28 @@ export function ariel(
 	if (options.test ?? true) {
 		configs.push(test({
 			overrides: get_overrides(options, 'test'),
+		}));
+	}
+
+	if (enable_react) {
+		configs.push(react({
+			...typescript_options,
+			overrides: get_overrides(options, 'react'),
+			tsconfigPath: tsconfig_path,
+		}));
+	}
+
+	if (enable_nextjs) {
+		configs.push(nextjs({
+			overrides: get_overrides(options, 'nextjs'),
+		}));
+	}
+
+	if (enable_solid) {
+		configs.push(solid({
+			overrides: get_overrides(options, 'solid'),
+			tsconfigPath: tsconfig_path,
+			typescript: !!enable_typescript,
 		}));
 	}
 

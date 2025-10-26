@@ -19,6 +19,12 @@ export interface OptionsFiles {
 	files?: string[];
 }
 
+export interface OptionsJSXA11y extends OptionsOverrides { }
+
+export interface OptionsJSX {
+	a11y?: boolean | OptionsJSXA11y;
+}
+
 export type OptionsTypescript
 	= (OptionsTypeScriptWithTypes & OptionsOverrides)
 		| (OptionsTypeScriptParserOptions & OptionsOverrides);
@@ -51,7 +57,7 @@ export interface OptionsStylistic {
 }
 
 export interface StylisticConfig
-	extends Pick<StylisticCustomizeOptions, 'indent' | 'quotes' | 'semi'> {
+	extends Pick<StylisticCustomizeOptions, 'indent' | 'quotes' | 'jsx' | 'semi'> {
 }
 
 export interface StylisticOptions extends StylisticConfig, OptionsOverrides { };
@@ -101,6 +107,15 @@ export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType 
 	 * @default auto-detect based on the dependencies
 	 */
 	typescript?: boolean | OptionsTypescript;
+
+	/**
+	 * Enable JSX related rules.
+	 *
+	 * Passing an object to enable JSX accessibility rules.
+	 *
+	 * @default true
+	 */
+	jsx?: boolean | OptionsJSX;
 
 	/**
 	 * Options for eslint-plugin-unicorn.
@@ -170,6 +185,38 @@ export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType 
 	regexp?: boolean | (OptionsRegExp & OptionsOverrides);
 
 	/**
+	 * Enable react rules.
+	 *
+	 * Requires installing:
+	 * - `@eslint-react/eslint-plugin`
+	 * - `eslint-plugin-react-hooks`
+	 * - `eslint-plugin-react-refresh`
+	 *
+	 * @default false
+	 */
+	react?: boolean | OptionsOverrides;
+
+	/**
+	 * Enable nextjs rules.
+	 *
+	 * Requires installing:
+	 * - `@next/eslint-plugin-next`
+	 *
+	 * @default false
+	 */
+	nextjs?: boolean | OptionsOverrides;
+
+	/**
+	 * Enable solid rules.
+	 *
+	 * Requires installing:
+	 * - `eslint-plugin-solid`
+	 *
+	 * @default false
+	 */
+	solid?: boolean | OptionsOverrides;
+
+	/**
 	 * Enable svelte rules.
 	 *
 	 * Requires installing:
@@ -222,6 +269,7 @@ export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType 
 		markdown?: TypedFlatConfigItem['rules'];
 		yaml?: TypedFlatConfigItem['rules'];
 		toml?: TypedFlatConfigItem['rules'];
+		react?: TypedFlatConfigItem['rules'];
 		svelte?: TypedFlatConfigItem['rules'];
 		tailwindcss?: TypedFlatConfigItem['rules'];
 	};
