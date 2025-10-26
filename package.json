@@ -2,7 +2,7 @@
   "name": "@ariel-salgado/eslint-config",
   "type": "module",
   "version": "0.1.10",
-  "packageManager": "pnpm@10.18.0",
+  "packageManager": "pnpm@10.19.0",
   "description": "ESLint config for @ariel-salgado.",
   "author": "Ariel Salgado <ariel.salgado.acevedo@gmail.com>",
   "license": "MIT",
@@ -32,17 +32,41 @@
     "lint:fix": "pnpm run lint --fix",
     "check": "tsc --noEmit",
     "prepare": "simple-git-hooks",
-    "release": "bumpp && pnpm publish",
+    "release": "sh ./scripts/release.sh",
     "prepublishOnly": "pnpm run build"
   },
   "peerDependencies": {
+    "@eslint-react/eslint-plugin": "^2.0.1",
+    "@next/eslint-plugin-next": "^15.4.0-canary.115",
     "eslint": "^9.30.0",
     "eslint-plugin-better-tailwindcss": "^3.5.2",
+    "eslint-plugin-jsx-a11y": ">=6.10.2",
+    "eslint-plugin-react-hooks": "^7.0.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "eslint-plugin-solid": "^0.14.3",
     "eslint-plugin-svelte": "^3.10.1",
     "svelte-eslint-parser": "^1.2.0"
   },
   "peerDependenciesMeta": {
+    "@eslint-react/eslint-plugin": {
+      "optional": true
+    },
+    "@next/eslint-plugin-next": {
+      "optional": true
+    },
     "eslint-plugin-better-tailwindcss": {
+      "optional": true
+    },
+    "eslint-plugin-jsx-a11y": {
+      "optional": true
+    },
+    "eslint-plugin-react-hooks": {
+      "optional": true
+    },
+    "eslint-plugin-react-refresh": {
+      "optional": true
+    },
+    "eslint-plugin-solid": {
       "optional": true
     },
     "eslint-plugin-svelte": {
@@ -63,7 +87,7 @@
     "@vitest/eslint-plugin": "catalog:plugins",
     "eslint-config-flat-gitignore": "catalog:plugins",
     "eslint-flat-config-utils": "catalog:",
-    "eslint-merge-processors": "catalog:",
+    "eslint-merge-processors": "catalog:plugins",
     "eslint-plugin-ariel": "catalog:plugins",
     "eslint-plugin-de-morgan": "catalog:plugins",
     "eslint-plugin-import-lite": "catalog:plugins",
@@ -85,11 +109,18 @@
     "yaml-eslint-parser": "catalog:parsers"
   },
   "devDependencies": {
+    "@eslint-react/eslint-plugin": "catalog:plugins",
+    "@next/eslint-plugin-next": "catalog:plugins",
+    "@types/eslint-plugin-jsx-a11y": "catalog:dev",
     "@types/node": "catalog:dev",
     "@typescript/native-preview": "catalog:dev",
     "bumpp": "catalog:dev",
     "eslint": "catalog:",
     "eslint-plugin-better-tailwindcss": "catalog:plugins",
+    "eslint-plugin-jsx-a11y": "catalog:plugins",
+    "eslint-plugin-react-hooks": "catalog:plugins",
+    "eslint-plugin-react-refresh": "catalog:plugins",
+    "eslint-plugin-solid": "catalog:plugins",
     "eslint-plugin-svelte": "catalog:plugins",
     "eslint-typegen": "catalog:dev",
     "lint-staged": "catalog:dev",
