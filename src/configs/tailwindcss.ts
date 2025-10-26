@@ -1,13 +1,13 @@
 import type { OptionsFiles, OptionsStylistic, TailwindCSSOptions, TypedFlatConfigItem, OptionsHasTailwindCSS } from '../types';
 
-import { GLOB_SVELTE } from '../globs';
+import { GLOB_JSX, GLOB_TSX, GLOB_SVELTE } from '../globs';
 import { ensure_packages, interop_default } from '../utils';
 
 export async function tailwindcss(
 	options: OptionsHasTailwindCSS & TailwindCSSOptions & OptionsStylistic & OptionsFiles = {},
 ): Promise<TypedFlatConfigItem[]> {
 	const {
-		files = [GLOB_SVELTE],
+		files = [GLOB_SVELTE, GLOB_JSX, GLOB_TSX],
 		overrides = {},
 		entryPoint = 'src/app.css',
 		printWidth = 100,

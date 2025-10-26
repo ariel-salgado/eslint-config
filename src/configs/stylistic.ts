@@ -5,6 +5,7 @@ import { interop_default } from '../utils';
 
 export const defaults: StylisticConfig = {
 	indent: 'tab',
+	jsx: true,
 	quotes: 'single',
 	semi: true,
 };
@@ -14,6 +15,7 @@ export async function stylistic(
 ): Promise<TypedFlatConfigItem[]> {
 	const {
 		indent,
+		jsx,
 		overrides = {},
 		quotes,
 		semi,
@@ -26,6 +28,7 @@ export async function stylistic(
 
 	const config = plugin_stylistic.configs.customize({
 		indent,
+		jsx,
 		pluginName: 'style',
 		quotes,
 		semi,

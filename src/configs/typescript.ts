@@ -11,8 +11,8 @@ import type {
 import process from 'node:process';
 
 import { plugin_ariel } from '../plugins';
-import { GLOB_TS, GLOB_MARKDOWN } from '../globs';
 import { rename_rules, interop_default } from '../utils';
+import { GLOB_TS, GLOB_JSX, GLOB_MARKDOWN } from '../globs';
 
 export async function typescript(
 	options: OptionsFiles & OptionsComponentExts & OptionsOverrides & OptionsTypeScriptWithTypes & OptionsTypeScriptParserOptions & OptionsProjectType = {},
@@ -27,10 +27,11 @@ export async function typescript(
 
 	const files = options.files ?? [
 		GLOB_TS,
+		GLOB_JSX,
 		...componentExts.map(ext => `**/*.${ext}`),
 	];
 
-	const files_type_aware = options.filesTypeAware ?? [GLOB_TS];
+	const files_type_aware = options.filesTypeAware ?? [GLOB_TS, GLOB_JSX];
 	const ignores_type_aware = options.ignoresTypeAware ?? [
 		`${GLOB_MARKDOWN}/**`,
 	];
