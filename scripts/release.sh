@@ -1,21 +1,51 @@
 #!/bin/sh
 set -e
 
-pnpm exec bumpp --no-commit --no-tag --yes
+get_version() {
+  node -e "console.log(JSON.parse(require('fs').readFileSync('./package.json','utf8')).version)"
+}
 
-VERSION=$(node -p "require('../package.json').version")
+bump_version() {
+  echo "🔼 Bumping version..."
+  pnpm exec bumpp --no-commit --no-tag --yes
+}
 
-echo "📦 Preparing to publish version $VERSION..."
-
-if pnpm publish "$@"; then
-  echo "✅ Publish succeeded! Creating git commit and tag..."
+commit_and_tag() {
+  local version="$1"
+  echo "✅ Publishing succeeded, committing and tagging v$version..."
   git add package.json
-  git commit -m "release: v$VERSION"
-  git tag "v$VERSION"
+  git commit -m "release: v$version"
+  git tag "v$version"
   git push
   git push --tags
-else
-  echo "❌ Publish failed. Reverting version bump..."
-  git checkout -- package.json
-  exit 1
-fi
+}
+
+revert_version() {
+  local old_version="$1"
+  echo "❌ Publish failed. Reverting package.json to v$old_version..."
+  node -e "
+    const fs = require('fs');
+    const pkg = JSON.parse(fs.readFileSync('./package.json','utf8'));
+    pkg.version = '$old_version';
+    fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2) + '\n');
+  "
+}
+
+main() {
+	OLD_VERSION=$(get_version)
+
+	bump_version
+
+	NEW_VERSION=$(get_version)
+
+	echo "📦 Preparing to publish version $NEW_VERSION..."
+
+	if pnpm publish "$@"; then
+	  commit_and_tag "$NEW_VERSION"
+	else
+	  revert_version "$OLD_VERSION"
+	  exit 1
+	fi
+}
+
+main "$@"
