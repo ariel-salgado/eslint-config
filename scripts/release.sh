@@ -7,7 +7,7 @@ get_version() {
 
 bump_version() {
   echo "🔼 Bumping version..."
-  pnpm exec bumpp --no-commit --no-tag --yes
+  pnpm exec bumpp --no-commit --no-tag --no-push --yes
 }
 
 commit_and_tag() {
@@ -31,21 +31,30 @@ revert_version() {
   "
 }
 
+publish_package() {
+  local version="$1"
+  if echo "$version" | grep -qE '\-(alpha|beta|rc|next|canary)'; then
+    echo "📦 Publishing prerelease version $version with --tag next..."
+    pnpm publish --tag next "$@"
+  else
+    echo "📦 Publishing stable version $version..."
+    pnpm publish "$@"
+  fi
+}
+
 main() {
-	OLD_VERSION=$(get_version)
+  OLD_VERSION=$(get_version)
+  bump_version
+  NEW_VERSION=$(get_version)
 
-	bump_version
+  echo "📦 Preparing to publish version $NEW_VERSION..."
 
-	NEW_VERSION=$(get_version)
-
-	echo "📦 Preparing to publish version $NEW_VERSION..."
-
-	if pnpm publish "$@"; then
-	  commit_and_tag "$NEW_VERSION"
-	else
-	  revert_version "$OLD_VERSION"
-	  exit 1
-	fi
+  if publish_package "$NEW_VERSION"; then
+    commit_and_tag "$NEW_VERSION"
+  else
+    revert_version "$OLD_VERSION"
+    exit 1
+  fi
 }
 
 main "$@"
