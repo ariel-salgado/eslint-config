@@ -1,7 +1,6 @@
 import { ariel } from './src';
 
-export default ariel(
-	{
-		pnpm: true,
-	},
-);
+export default ariel({
+	type: 'lib',
+	pnpm: true,
+});
