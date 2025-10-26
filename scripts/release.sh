@@ -33,12 +33,13 @@ revert_version() {
 
 publish_package() {
   local version="$1"
+  shift
   if echo "$version" | grep -qE '\-(alpha|beta|rc|next|canary)'; then
     echo "📦 Publishing prerelease version $version with --tag next..."
-    pnpm publish --tag next "$@"
+    pnpm publish --tag next --no-git-checks "$@"
   else
     echo "📦 Publishing stable version $version..."
-    pnpm publish "$@"
+    pnpm publish --no-git-checks "$@"
   fi
 }
 
@@ -49,7 +50,7 @@ main() {
 
   echo "📦 Preparing to publish version $NEW_VERSION..."
 
-  if publish_package "$NEW_VERSION"; then
+  if publish_package "$NEW_VERSION" "$@"; then
     commit_and_tag "$NEW_VERSION"
   else
     revert_version "$OLD_VERSION"
