@@ -83,6 +83,13 @@ export interface OptionsRegExp {
 	level?: 'error' | 'warn';
 }
 
+export interface OptionsPnpm {
+	catalogs?: boolean;
+	json?: boolean;
+	yaml?: boolean;
+	sort?: boolean;
+}
+
 export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType {
 	/**
 	 * Enable gitignore support.
@@ -108,6 +115,20 @@ export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType 
 	 * Core rules. Can't be disabled.
 	 */
 	javascript?: OptionsOverrides;
+
+	/**
+	 * Enable Node.js rules
+	 *
+	 * @default true
+	 */
+	node?: boolean;
+
+	/**
+	 * Enable JSDoc rules
+	 *
+	 * @default true
+	 */
+	jsdoc?: boolean;
 
 	/**
 	 * Enable TypeScript support.
@@ -256,7 +277,7 @@ export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType 
 	 * @experimental
 	 * @default false
 	 */
-	pnpm?: boolean;
+	pnpm?: boolean | OptionsPnpm;
 
 	/**
 	 * Automatically rename plugins in the config.

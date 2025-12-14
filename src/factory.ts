@@ -1,7 +1,8 @@
 import type { Linter } from 'eslint';
-import type { RuleOptions, ConfigNames } from './typegen';
-import type { Awaitable, OptionsConfig, TypedFlatConfigItem } from './types';
+import type { RuleOptions } from './typegen';
+import type { Awaitable, ConfigNames, OptionsConfig, TypedFlatConfigItem } from './types';
 
+import { findUpSync } from 'find-up-simple';
 import { FlatConfigComposer } from 'eslint-flat-config-utils';
 
 import { interop_default } from './utils';
@@ -81,9 +82,11 @@ export function ariel(
 		gitignore: enable_git_ignore = true,
 		ignores: user_ignores = [],
 		imports: enable_imports = true,
+		jsdoc: enable_jsdoc = true,
 		jsx: enable_jsx = true,
 		nextjs: enable_nextjs = has_nextjs(),
-		pnpm: enable_catalogs = false,
+		node: enable_node = true,
+		pnpm: enable_catalogs = !!findUpSync('pnpm-workspace.yaml'),
 		react: enable_react = has_react(),
 		regexp: enable_regexp = true,
 		solid: enable_solid = has_solid(),
@@ -135,27 +138,30 @@ export function ariel(
 			overrides: get_overrides(options, 'javascript'),
 		}),
 		comments(),
-		node(),
-		jsdoc({
-			stylistic: stylistic_options,
-		}),
-		imports({
-			stylistic: stylistic_options,
-		}),
 		perfectionist(),
 		morgan(),
 	);
 
+	if (enable_node) {
+		configs.push(
+			node(),
+		);
+	}
+
+	if (enable_jsdoc) {
+		configs.push(
+			jsdoc({
+				stylistic: stylistic_options,
+			}),
+		);
+	}
+
 	if (enable_imports) {
 		configs.push(
-			imports(enable_imports === true
-				? {
-						stylistic: stylistic_options,
-					}
-				: {
-						stylistic: stylistic_options,
-						...enable_imports,
-					}),
+			imports({
+				stylistic: stylistic_options,
+				...resolve_sub_options(options, 'imports'),
+			}),
 		);
 	}
 
@@ -196,6 +202,7 @@ export function ariel(
 	if (enable_react) {
 		configs.push(react({
 			...typescript_options,
+			...resolve_sub_options(options, 'react'),
 			overrides: get_overrides(options, 'react'),
 			tsconfigPath: tsconfig_path,
 		}));
@@ -243,7 +250,11 @@ export function ariel(
 
 	if (enable_catalogs) {
 		configs.push(
-			pnpm(),
+			pnpm({
+				json: options.jsonc !== false,
+				yaml: options.yaml !== false,
+				...resolve_sub_options(options, 'pnpm'),
+			}),
 		);
 	}
 

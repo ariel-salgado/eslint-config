@@ -48,8 +48,6 @@ export async function yaml(
 				'yaml/no-irregular-whitespace': 'error',
 				'yaml/plain-scalar': 'error',
 
-				'yaml/vue-custom-block/no-parsing-error': 'error',
-
 				...stylistic
 					? {
 							'yaml/block-mapping-question-indicator-newline': 'error',
@@ -67,42 +65,6 @@ export async function yaml(
 					: {},
 
 				...overrides,
-			},
-		},
-		{
-			files: ['pnpm-workspace.yaml'],
-			name: 'ariel/yaml/pnpm-workspace',
-			rules: {
-				'yaml/sort-keys': [
-					'error',
-					{
-						order: [
-							'packages',
-							'overrides',
-							'patchedDependencies',
-							'hoistPattern',
-							'catalog',
-							'catalogs',
-
-							'allowedDeprecatedVersions',
-							'allowNonAppliedPatches',
-							'configDependencies',
-							'ignoredBuiltDependencies',
-							'ignoredOptionalDependencies',
-							'neverBuiltDependencies',
-							'onlyBuiltDependencies',
-							'onlyBuiltDependenciesFile',
-							'packageExtensions',
-							'peerDependencyRules',
-							'supportedArchitectures',
-						],
-						pathPattern: '^$',
-					},
-					{
-						order: { type: 'asc' },
-						pathPattern: '.*',
-					},
-				],
 			},
 		},
 	];
