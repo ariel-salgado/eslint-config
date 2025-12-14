@@ -2,6 +2,7 @@ import type { OptionsOverrides, TypedFlatConfigItem } from '../types';
 
 import globals from 'globals';
 
+import { is_in_editor_env } from '../env';
 import { plugin_ariel, plugin_unused_imports } from '../plugins';
 
 export async function javascript(options: OptionsOverrides = {}): Promise<TypedFlatConfigItem[]> {
@@ -177,7 +178,7 @@ export async function javascript(options: OptionsOverrides = {}): Promise<TypedF
 					},
 				],
 				'prefer-const': [
-					'warn',
+					is_in_editor_env() ? 'warn' : 'error',
 					{
 						destructuring: 'all',
 						ignoreReadBeforeAssign: true,
@@ -192,7 +193,7 @@ export async function javascript(options: OptionsOverrides = {}): Promise<TypedF
 				'require-yield': 'error',
 				'symbol-description': 'error',
 				'unicode-bom': ['error', 'never'],
-				'unused-imports/no-unused-imports': 'warn',
+				'unused-imports/no-unused-imports': is_in_editor_env() ? 'warn' : 'error',
 				'unused-imports/no-unused-vars': [
 					'error',
 					{

@@ -1,6 +1,7 @@
 import type { OptionsFiles, OptionsOverrides, TypedFlatConfigItem } from '../types';
 
 import { GLOB_TESTS } from '../globs';
+import { is_in_editor_env } from '../env';
 import { interop_default } from '../utils';
 
 let _plugin_test: any;
@@ -44,7 +45,7 @@ export async function test(
 				'test/consistent-test-it': ['error', { fn: 'it', withinDescribe: 'it' }],
 				'test/no-identical-title': 'error',
 				'test/no-import-node-test': 'error',
-				'test/no-only-tests': 'warn',
+				'test/no-only-tests': is_in_editor_env() ? 'warn' : 'error',
 
 				'test/prefer-hooks-in-order': 'error',
 				'test/prefer-lowercase-title': 'error',
