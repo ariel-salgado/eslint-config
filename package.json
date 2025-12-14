@@ -2,7 +2,7 @@
   "name": "@ariel-salgado/eslint-config",
   "type": "module",
   "version": "0.2.0-beta.1",
-  "packageManager": "pnpm@10.19.0",
+  "packageManager": "pnpm@10.25.0",
   "description": "ESLint config for @ariel-salgado.",
   "author": "Ariel Salgado <ariel.salgado.acevedo@gmail.com>",
   "license": "MIT",
@@ -12,12 +12,12 @@
     "url": "git+https://github.com/ariel-salgado/eslint-config.git"
   },
   "exports": {
-    ".": "./dist/index.js",
+    ".": "./dist/index.mjs",
     "./package.json": "./package.json"
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "files": [
     "dist"
   ],
@@ -102,6 +102,7 @@
     "eslint-plugin-unicorn": "catalog:plugins",
     "eslint-plugin-unused-imports": "catalog:plugins",
     "eslint-plugin-yml": "catalog:plugins",
+    "find-up-simple": "catalog:",
     "globals": "catalog:",
     "jsonc-eslint-parser": "catalog:parsers",
     "local-pkg": "catalog:",
@@ -133,7 +134,8 @@
     "typescript": "catalog:dev"
   },
   "resolutions": {
-    "eslint": "catalog:"
+    "eslint": "catalog:",
+    "tsx": "catalog:dev"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm exec lint-staged"

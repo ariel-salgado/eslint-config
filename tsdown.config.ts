@@ -6,4 +6,5 @@ export default defineConfig({
 		tsconfig: './tsconfig.build.json',
 		tsgo: true,
 	},
+	exports: true,
 });
