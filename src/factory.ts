@@ -72,13 +72,14 @@ export const default_plugin_renaming = {
  *  The merged ESLint configurations.
  */
 export function ariel(
-	options: OptionsConfig & Omit<TypedFlatConfigItem, 'files'> = {},
+	options: OptionsConfig & Omit<TypedFlatConfigItem, 'files' | 'ignores'> = {},
 	...userConfigs: Awaitable<TypedFlatConfigItem | TypedFlatConfigItem[] | FlatConfigComposer<any, any> | Linter.Config[]>[]
 ): FlatConfigComposer<TypedFlatConfigItem, ConfigNames> {
 	const {
 		autoRenamePlugins = true,
 		componentExts = [],
 		gitignore: enable_git_ignore = true,
+		ignores: user_ignores = [],
 		imports: enable_imports = true,
 		jsx: enable_jsx = true,
 		nextjs: enable_nextjs = has_nextjs(),
@@ -129,7 +130,7 @@ export function ariel(
 	const tsconfig_path = 'tsconfigPath' in typescript_options ? typescript_options.tsconfigPath : undefined;
 
 	configs.push(
-		ignores(options.ignores),
+		ignores(user_ignores),
 		javascript({
 			overrides: get_overrides(options, 'javascript'),
 		}),

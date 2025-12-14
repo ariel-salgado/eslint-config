@@ -1,66 +1,42 @@
-import { writeFile } from 'node:fs/promises';
+import fs from 'node:fs/promises';
+
 import { builtinRules } from 'eslint/use-at-your-own-risk';
 import { flatConfigsToRulesDTS } from 'eslint-typegen/core';
 
-import {
-	node,
-	pnpm,
-	test,
-	toml,
-	yaml,
-	jsdoc,
-	jsonc,
-	morgan,
-	regexp,
-	svelte,
-	combine,
-	ignores,
-	imports,
-	unicorn,
-	comments,
-	disables,
-	markdown,
-	stylistic,
-	javascript,
-	typescript,
-	tailwindcss,
-	perfectionist,
-	sort_ts_config,
-	sort_package_json,
-} from '../src';
+import { ariel } from '../src/factory';
 
-const configs = await combine(
-	{
-		plugins: {
-			'': {
-				rules: Object.fromEntries(builtinRules),
+const configs = await ariel({
+	imports: true,
+	jsx: {
+		a11y: true,
+	},
+	jsonc: true,
+	markdown: true,
+	nextjs: true,
+	react: true,
+	solid: true,
+	pnpm: true,
+	regexp: true,
+	stylistic: true,
+	gitignore: true,
+	svelte: true,
+	typescript: {
+		tsconfigPath: 'tsconfig.json',
+	},
+	unicorn: true,
+	yaml: true,
+	toml: true,
+	test: true,
+})
+	.prepend(
+		{
+			plugins: {
+				'': {
+					rules: Object.fromEntries(builtinRules.entries()),
+				},
 			},
 		},
-	},
-	comments(),
-	disables(),
-	ignores(),
-	imports(),
-	javascript(),
-	jsdoc(),
-	jsonc(),
-	markdown(),
-	morgan(),
-	node(),
-	perfectionist(),
-	pnpm(),
-	regexp(),
-	sort_package_json(),
-	sort_ts_config(),
-	stylistic(),
-	svelte(),
-	tailwindcss(),
-	test(),
-	toml(),
-	typescript(),
-	unicorn(),
-	yaml(),
-);
+	);
 
 const config_names = configs.map(i => i.name).filter(Boolean) as string[];
 
@@ -73,4 +49,4 @@ dts += `
 export type ConfigNames = ${config_names.map(i => `'${i}'`).join(' | ')}
 `;
 
-await writeFile('src/typegen.d.ts', dts);
+await fs.writeFile('src/typegen.d.ts', dts);

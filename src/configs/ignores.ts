@@ -1,20 +1,26 @@
 import type { TypedFlatConfigItem } from '../types';
 
 import { GLOB_EXCLUDE } from '../globs';
-import { plugin_ignore } from '../plugins';
 
-export async function ignores(ignores: string[] = []): Promise<TypedFlatConfigItem[]> {
+export async function ignores(userIgnores: string[] | ((originals: string[]) => string[]) = []): Promise<TypedFlatConfigItem[]> {
+	let ignores = [
+		...GLOB_EXCLUDE,
+	];
+
+	if (typeof userIgnores === 'function') {
+		ignores = userIgnores(ignores);
+	}
+	else {
+		ignores = [
+			...ignores,
+			...userIgnores,
+		];
+	}
+
 	return [
 		{
-			name: 'ariel/global-ignores',
-			ignores: [
-				...GLOB_EXCLUDE,
-				...ignores,
-			],
-		},
-		{
-			name: 'ariel/gitignore',
-			...plugin_ignore({ strict: false }),
+			ignores,
+			name: 'ariel/ignores',
 		},
 	];
 }
