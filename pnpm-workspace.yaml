@@ -1,32 +1,19 @@
 catalogMode: prefer
-
 ignoreWorkspaceRootCheck: true
-
+shamefullyHoist: true
 shellEmulator: true
-
 strictPeerDependencies: false
-
 trustPolicy: no-downgrade
-
 trustPolicyExclude:
   - semver@6.3.1
   - chokidar@4.0.3
 
 packages: []
 
-catalog:
-  '@antfu/install-pkg': ^1.1.0
-  '@clack/prompts': ^0.11.0
-  eslint: ^9.39.2
-  eslint-flat-config-utils: ^2.1.4
-  find-up-simple: 1.0.1
-  globals: ^16.5.0
-  local-pkg: 1.1.2
-
 catalogs:
   dev:
     '@types/eslint-plugin-jsx-a11y': ^6.10.1
-    '@types/node': ^25.0.2
+    '@types/node': ^25.0.3
     '@typescript/native-preview': 7.0.0-dev.20251213.1
     bumpp: ^10.3.2
     eslint-typegen: ^2.3.0
@@ -37,7 +24,17 @@ catalogs:
     tsdown: ^0.17.4
     tsx: ^4.21.0
     typescript: ~5.9.3
+  internal:
+    '@antfu/install-pkg': ^1.1.0
+    '@clack/prompts': ^0.11.0
+    eslint: ^9.39.2
+    eslint-flat-config-utils: ^2.1.4
+    eslint-merge-processors: ^2.0.0
+    find-up-simple: 1.0.1
+    globals: ^16.5.0
+    local-pkg: 1.1.2
   parsers:
+    '@typescript-eslint/parser': ^8.50.0
     jsonc-eslint-parser: ^2.4.2
     svelte-eslint-parser: ^1.4.1
     toml-eslint-parser: ^0.10.1
@@ -46,17 +43,15 @@ catalogs:
     '@eslint-community/eslint-plugin-eslint-comments': ^4.5.0
     '@eslint-react/eslint-plugin': ^2.3.13
     '@eslint/markdown': ^7.5.1
-    '@next/eslint-plugin-next': ^16.0.10
+    '@next/eslint-plugin-next': ^16.1.0
     '@stylistic/eslint-plugin': ^5.6.1
-    '@typescript-eslint/eslint-plugin': ^8.49.0
-    '@typescript-eslint/parser': ^8.49.0
-    '@vitest/eslint-plugin': ^1.5.2
+    '@typescript-eslint/eslint-plugin': ^8.50.0
+    '@vitest/eslint-plugin': ^1.5.4
     eslint-config-flat-gitignore: ^2.1.0
-    eslint-merge-processors: ^2.0.0
     eslint-plugin-ariel: ^0.0.3
     eslint-plugin-better-tailwindcss: ^3.8.0
     eslint-plugin-de-morgan: ^2.0.0
-    eslint-plugin-import-lite: ^0.3.0
+    eslint-plugin-import-lite: ^0.3.1
     eslint-plugin-jsdoc: ^61.5.0
     eslint-plugin-jsonc: ^2.21.0
     eslint-plugin-jsx-a11y: ^6.10.2
@@ -65,14 +60,14 @@ catalogs:
     eslint-plugin-perfectionist: ^4.15.1
     eslint-plugin-pnpm: ^1.4.3
     eslint-plugin-react-hooks: ^7.0.1
-    eslint-plugin-react-refresh: ^0.4.24
+    eslint-plugin-react-refresh: ^0.4.26
     eslint-plugin-regexp: ^2.10.0
     eslint-plugin-solid: ^0.14.5
     eslint-plugin-svelte: ^3.13.1
     eslint-plugin-toml: ^0.12.0
     eslint-plugin-unicorn: ^62.0.0
     eslint-plugin-unused-imports: ^4.3.0
-    eslint-plugin-yml: ^1.19.0
+    eslint-plugin-yml: ^1.19.1
 
 onlyBuiltDependencies:
   - esbuild

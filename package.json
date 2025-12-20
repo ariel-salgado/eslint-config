@@ -77,17 +77,17 @@
     }
   },
   "dependencies": {
-    "@antfu/install-pkg": "catalog:",
-    "@clack/prompts": "catalog:",
+    "@antfu/install-pkg": "catalog:internal",
+    "@clack/prompts": "catalog:internal",
     "@eslint-community/eslint-plugin-eslint-comments": "catalog:plugins",
     "@eslint/markdown": "catalog:plugins",
     "@stylistic/eslint-plugin": "catalog:plugins",
     "@typescript-eslint/eslint-plugin": "catalog:plugins",
-    "@typescript-eslint/parser": "catalog:plugins",
+    "@typescript-eslint/parser": "catalog:parsers",
     "@vitest/eslint-plugin": "catalog:plugins",
     "eslint-config-flat-gitignore": "catalog:plugins",
-    "eslint-flat-config-utils": "catalog:",
-    "eslint-merge-processors": "catalog:plugins",
+    "eslint-flat-config-utils": "catalog:internal",
+    "eslint-merge-processors": "catalog:internal",
     "eslint-plugin-ariel": "catalog:plugins",
     "eslint-plugin-de-morgan": "catalog:plugins",
     "eslint-plugin-import-lite": "catalog:plugins",
@@ -102,10 +102,10 @@
     "eslint-plugin-unicorn": "catalog:plugins",
     "eslint-plugin-unused-imports": "catalog:plugins",
     "eslint-plugin-yml": "catalog:plugins",
-    "find-up-simple": "catalog:",
-    "globals": "catalog:",
+    "find-up-simple": "catalog:internal",
+    "globals": "catalog:internal",
     "jsonc-eslint-parser": "catalog:parsers",
-    "local-pkg": "catalog:",
+    "local-pkg": "catalog:internal",
     "toml-eslint-parser": "catalog:parsers",
     "yaml-eslint-parser": "catalog:parsers"
   },
@@ -116,7 +116,7 @@
     "@types/node": "catalog:dev",
     "@typescript/native-preview": "catalog:dev",
     "bumpp": "catalog:dev",
-    "eslint": "catalog:",
+    "eslint": "catalog:internal",
     "eslint-plugin-better-tailwindcss": "catalog:plugins",
     "eslint-plugin-jsx-a11y": "catalog:plugins",
     "eslint-plugin-react-hooks": "catalog:plugins",
@@ -132,10 +132,6 @@
     "tsdown": "catalog:dev",
     "tsx": "catalog:dev",
     "typescript": "catalog:dev"
-  },
-  "resolutions": {
-    "eslint": "catalog:",
-    "tsx": "catalog:dev"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm exec lint-staged"
