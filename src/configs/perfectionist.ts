@@ -60,7 +60,7 @@ export async function perfectionist(): Promise<TypedFlatConfigItem[]> {
 								modifiers: ['named'],
 							},
 						],
-						newlinesBetween: 'always',
+						newlinesBetween: 1,
 						sortSideEffects: true,
 					},
 				],
