@@ -89,9 +89,9 @@ export async function pnpm(
 			rules: {
 				'pnpm/yaml-enforce-settings': ['error', {
 					settings: {
-						catalogMode: 'prefer',
 						shellEmulator: true,
 						trustPolicy: 'no-downgrade',
+						...(catalogs ? { catalogMode: 'prefer' } : {}),
 					},
 				}],
 				'pnpm/yaml-no-duplicate-catalog-item': 'error',
