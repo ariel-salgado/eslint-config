@@ -1,41 +1,41 @@
-import type { Linter } from 'eslint';
 import type { RuleOptions } from './typegen';
 import type { Awaitable, ConfigNames, OptionsConfig, TypedFlatConfigItem } from './types';
+import type { Linter } from 'eslint';
 
-import { findUpSync } from 'find-up-simple';
 import { FlatConfigComposer } from 'eslint-flat-config-utils';
-
-import { interop_default } from './utils';
-import { has_react, has_solid, has_svelte, has_nextjs, has_typescript, has_tailwindcss, is_in_editor_env } from './env';
+import { findUpSync } from 'find-up-simple';
 import {
-	jsx,
-	node,
-	pnpm,
-	test,
-	toml,
-	yaml,
-	jsdoc,
-	jsonc,
-	react,
-	solid,
-	morgan,
-	regexp,
-	svelte,
-	nextjs,
-	ignores,
-	imports,
-	unicorn,
+	baseline,
 	comments,
 	disables,
-	markdown,
-	stylistic,
+	ignores,
+	imports,
 	javascript,
-	typescript,
-	tailwindcss,
+	jsdoc,
+	jsonc,
+	jsx,
+	markdown,
+	morgan,
+	nextjs,
+	node,
 	perfectionist,
-	sort_ts_config,
+	pnpm,
+	react,
+	regexp,
+	solid,
 	sort_package_json,
+	sort_ts_config,
+	stylistic,
+	svelte,
+	tailwindcss,
+	test,
+	toml,
+	typescript,
+	unicorn,
+	yaml,
 } from './configs';
+import { has_nextjs, has_react, has_solid, has_svelte, has_tailwindcss, has_typescript, is_in_editor_env } from './env';
+import { interop_default } from './utils';
 
 const flat_config_props = [
 	'name',
@@ -55,6 +55,7 @@ export const default_plugin_renaming = {
 	'@next/next': 'next',
 	'@stylistic': 'style',
 	'@typescript-eslint': 'ts',
+	'baseline-js': 'baseline',
 	'better-tailwindcss': 'tailwindcss',
 	'import-lite': 'import',
 	'n': 'node',
@@ -72,18 +73,19 @@ export const default_plugin_renaming = {
  * @returns {Promise<TypedFlatConfigItem[]>}
  *  The merged ESLint configurations.
  */
-export function ariel(
+export function defineConfig(
 	options: OptionsConfig & Omit<TypedFlatConfigItem, 'files' | 'ignores'> = {},
 	...userConfigs: Awaitable<TypedFlatConfigItem | TypedFlatConfigItem[] | FlatConfigComposer<any, any> | Linter.Config[]>[]
 ): FlatConfigComposer<TypedFlatConfigItem, ConfigNames> {
 	const {
 		autoRenamePlugins = true,
 		componentExts = [],
+		baseline: enable_baseline = false,
 		gitignore: enable_git_ignore = true,
 		ignores: user_ignores = [],
 		imports: enable_imports = true,
 		jsdoc: enable_jsdoc = true,
-		jsx: enable_jsx = true,
+		jsx: enable_jsx = has_react() || has_nextjs() || has_solid(),
 		nextjs: enable_nextjs = has_nextjs(),
 		node: enable_node = true,
 		pnpm: enable_catalogs = !!findUpSync('pnpm-workspace.yaml'),
@@ -281,6 +283,10 @@ export function ariel(
 				},
 			),
 		);
+	}
+
+	if (enable_baseline) {
+		configs.push(baseline(enable_baseline));
 	}
 
 	configs.push(
