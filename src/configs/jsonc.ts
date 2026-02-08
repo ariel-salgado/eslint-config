@@ -1,7 +1,7 @@
 import type { OptionsFiles, OptionsOverrides, OptionsStylistic, TypedFlatConfigItem } from '../types';
 
-import { interop_default } from '../utils';
 import { GLOB_JSON, GLOB_JSON5, GLOB_JSONC } from '../globs';
+import { interop_default } from '../utils';
 
 export async function jsonc(
 	options: OptionsFiles & OptionsStylistic & OptionsOverrides = {},
@@ -70,7 +70,7 @@ export async function jsonc(
 							'jsonc/array-bracket-spacing': ['error', 'never'],
 							'jsonc/comma-dangle': ['error', 'never'],
 							'jsonc/comma-style': ['error', 'last'],
-							'jsonc/indent': ['error', indent],
+							'jsonc/indent': ['error', typeof indent === 'number' ? indent : indent === 'tab' ? 'tab' : 2],
 							'jsonc/key-spacing': ['error', { afterColon: true, beforeColon: false }],
 							'jsonc/object-curly-newline': ['error', { consistent: true, multiline: true }],
 							'jsonc/object-curly-spacing': ['error', 'always'],

@@ -48,14 +48,12 @@ export async function toml(
 				'toml/precision-of-integer': 'error',
 				'toml/tables-order': 'error',
 
-				'toml/vue-custom-block/no-parsing-error': 'error',
-
 				...stylistic
 					? {
 							'toml/array-bracket-newline': 'error',
 							'toml/array-bracket-spacing': 'error',
 							'toml/array-element-newline': 'error',
-							'toml/indent': ['error', indent === 'tab' ? 2 : indent],
+							'toml/indent': ['error', typeof indent === 'number' ? indent : indent === 'tab' ? 'tab' : 2],
 							'toml/inline-table-curly-spacing': 'error',
 							'toml/key-spacing': 'error',
 							'toml/padding-line-between-pairs': 'error',

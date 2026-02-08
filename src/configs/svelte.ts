@@ -1,4 +1,4 @@
-import type { OptionsFiles, OptionsOverrides, OptionsStylistic, TypedFlatConfigItem, OptionsHasTypeScript } from '../types';
+import type { OptionsFiles, OptionsHasTypeScript, OptionsOverrides, OptionsStylistic, TypedFlatConfigItem } from '../types';
 
 import { GLOB_SVELTE } from '../globs';
 import { ensure_packages, interop_default } from '../utils';
@@ -80,7 +80,6 @@ export async function svelte(
 				'svelte/sort-attributes': 'error',
 				'svelte/system': 'error',
 				'svelte/valid-each-key': 'error',
-				'style/indent': 'off',
 
 				'unused-imports/no-unused-vars': [
 					'error',
@@ -94,11 +93,15 @@ export async function svelte(
 
 				...stylistic
 					? {
+							'style/indent': 'off',
 							'style/no-trailing-spaces': 'off',
 							'svelte/derived-has-same-inputs-outputs': 'error',
 							'svelte/html-closing-bracket-spacing': 'error',
 							'svelte/html-quotes': ['error', { prefer: quotes === 'backtick' ? 'single' : quotes }],
-							'svelte/indent': ['error', { alignAttributesVertically: true, indent }],
+							'svelte/indent': ['error', {
+								alignAttributesVertically: true,
+								indent: typeof indent === 'number' ? indent : indent === 'tab' ? 'tab' : 2,
+							}],
 							'svelte/mustache-spacing': 'error',
 							'svelte/no-spaces-around-equal-signs-in-attribute': 'error',
 							'svelte/no-trailing-spaces': 'error',
