@@ -1,4 +1,3 @@
-export * from './baseline';
 export * from './comments';
 export * from './disables';
 export * from './ignores';

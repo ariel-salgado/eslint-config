@@ -4,7 +4,6 @@
 export { default as plugin_comments } from '@eslint-community/eslint-plugin-eslint-comments';
 export { default as plugin_ignore } from 'eslint-config-flat-gitignore';
 export { default as plugin_ariel } from 'eslint-plugin-ariel';
-export { default as plugin_baseline } from 'eslint-plugin-baseline-js';
 export { default as plugin_morgan } from 'eslint-plugin-de-morgan';
 export { default as plugin_import } from 'eslint-plugin-import-lite';
 export { default as plugin_node } from 'eslint-plugin-n';

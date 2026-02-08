@@ -5,7 +5,6 @@ import type { Linter } from 'eslint';
 import { FlatConfigComposer } from 'eslint-flat-config-utils';
 import { findUpSync } from 'find-up-simple';
 import {
-	baseline,
 	comments,
 	disables,
 	ignores,
@@ -55,7 +54,6 @@ export const default_plugin_renaming = {
 	'@next/next': 'next',
 	'@stylistic': 'style',
 	'@typescript-eslint': 'ts',
-	'baseline-js': 'baseline',
 	'better-tailwindcss': 'tailwindcss',
 	'import-lite': 'import',
 	'n': 'node',
@@ -80,7 +78,6 @@ export function defineConfig(
 	const {
 		autoRenamePlugins = true,
 		componentExts = [],
-		baseline: enable_baseline = false,
 		gitignore: enable_git_ignore = true,
 		ignores: user_ignores = [],
 		imports: enable_imports = true,
@@ -283,10 +280,6 @@ export function defineConfig(
 				},
 			),
 		);
-	}
-
-	if (enable_baseline) {
-		configs.push(baseline(enable_baseline));
 	}
 
 	configs.push(

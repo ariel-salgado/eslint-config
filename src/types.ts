@@ -95,13 +95,6 @@ export interface OptionsReact extends OptionsOverrides {
 	reactCompiler?: boolean;
 }
 
-export interface OptionsBaseline {
-	level?: 'error' | 'warn';
-	baseline?: 'widely' | 'newly' | number;
-	available?: 'widely' | 'newly' | number;
-	ignoreFeatures?: string[];
-}
-
 export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType {
 	/**
 	 * Enable gitignore support.
@@ -297,13 +290,6 @@ export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType 
 	 * @default true
 	 */
 	autoRenamePlugins?: boolean;
-
-	/**
-	 * Enforce the Javascript baseline
-	 *
-	 * @default false
-	 */
-	baseline?: boolean | OptionsBaseline;
 
 	/**
 	 * Provide overrides for rules for each integration.

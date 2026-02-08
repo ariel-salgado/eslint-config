@@ -7,6 +7,6 @@ export default defineConfig({
 		tsgo: true,
 	},
 	exports: true,
-	format: ['esm'],
 	clean: true,
+	format: ['esm'],
 });
