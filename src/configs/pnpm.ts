@@ -1,20 +1,7 @@
 import type { OptionsPnpm, TypedFlatConfigItem } from '../types';
 
-import { findUp } from 'find-up-simple';
-import { readFile } from 'node:fs/promises';
-
-import { is_in_editor_env } from '../env';
+import { has_pnpm_catalogs, is_in_editor_env } from '../env';
 import { interop_default } from '../utils';
-
-async function detect_catalog_usage(): Promise<boolean> {
-	const workspace_file = await findUp('pnpm-workspace.yaml');
-	if (!workspace_file) {
-		return false;
-	}
-
-	const yaml = await readFile(workspace_file, 'utf-8');
-	return yaml.includes('catalog:') || yaml.includes('catalogs:');
-}
 
 export async function pnpm(
 	options: OptionsPnpm,
@@ -32,7 +19,7 @@ export async function pnpm(
 	]);
 
 	const {
-		catalogs = await detect_catalog_usage(),
+		catalogs = await has_pnpm_catalogs(),
 		json = true,
 		sort = true,
 		yaml = true,
@@ -59,7 +46,10 @@ export async function pnpm(
 						? {
 								'pnpm/json-enforce-catalog': [
 									'error',
-									{ autofix: !is_in_editor_env() },
+									{
+										autofix: !is_in_editor_env(),
+										ignores: ['@types/vscode'],
+									},
 								],
 							}
 						: {}),
@@ -91,7 +81,6 @@ export async function pnpm(
 					settings: {
 						shellEmulator: true,
 						trustPolicy: 'no-downgrade',
-						...(catalogs ? { catalogMode: 'prefer' } : {}),
 					},
 				}],
 				'pnpm/yaml-no-duplicate-catalog-item': 'error',
