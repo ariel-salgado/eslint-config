@@ -1,5 +1,7 @@
 import process from 'node:process';
 
+import { readFile } from 'node:fs/promises';
+import { findUp } from 'find-up-simple';
 import { isPackageExists } from 'local-pkg';
 
 export function has_typescript(): boolean {
@@ -37,6 +39,17 @@ export function has_solid(): boolean {
 	return (
 		isPackageExists('solid-js')
 	);
+}
+
+export async function has_pnpm_catalogs(): Promise<boolean> {
+	const workspace_file = await findUp('pnpm-workspace.yaml');
+
+	if (!workspace_file) {
+		return false;
+	}
+
+	const yaml = await readFile(workspace_file, 'utf8');
+	return yaml.includes('catalog:') || yaml.includes('catalogs:');
 }
 
 export function is_in_git_hooks_or_lint_staged(): boolean {
