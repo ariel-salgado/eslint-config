@@ -7,7 +7,5 @@ export default defineConfig({
 		tsgo: true,
 	},
 	shims: true,
-	format: ['esm'],
 	exports: true,
-	inlineOnly: false,
 });
