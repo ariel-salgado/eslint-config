@@ -1,6 +1,6 @@
-import type { OptionsFiles, OptionsStylistic, TailwindCSSOptions, TypedFlatConfigItem, OptionsHasTailwindCSS } from '../types';
+import type { OptionsFiles, OptionsHasTailwindCSS, OptionsStylistic, TailwindCSSOptions, TypedFlatConfigItem } from '../types';
 
-import { GLOB_JSX, GLOB_TSX, GLOB_SVELTE } from '../globs';
+import { GLOB_JSX, GLOB_SVELTE, GLOB_TSX } from '../globs';
 import { ensure_packages, interop_default } from '../utils';
 
 export async function tailwindcss(
@@ -39,7 +39,7 @@ export async function tailwindcss(
 				'tailwindcss/enforce-consistent-line-wrapping': [
 					'error',
 					{
-						indent,
+						indent: typeof indent === 'number' ? indent : indent === 'tab' ? 'tab' : 2,
 						printWidth,
 						preferSingleLine: true,
 					},
@@ -47,7 +47,7 @@ export async function tailwindcss(
 				'tailwindcss/enforce-consistent-important-position': 'error',
 				'tailwindcss/enforce-shorthand-classes': 'error',
 				'tailwindcss/no-deprecated-classes': 'error',
-				'tailwindcss/no-unregistered-classes': [
+				'tailwindcss/no-unknown-classes': [
 					'error',
 					{
 						detectComponentClasses: true,
