@@ -1,8 +1,10 @@
-import { ariel } from './src';
+import { defineConfig } from './src';
 
-export default ariel({
+const config = defineConfig({
 	type: 'lib',
-	pnpm: {
-		catalogs: true,
+	baseline: {
+		ignoreFeatures: ['top-level-await'],
 	},
 });
+
+export default config;
