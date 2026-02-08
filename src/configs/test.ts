@@ -1,7 +1,7 @@
 import type { OptionsFiles, OptionsOverrides, TypedFlatConfigItem } from '../types';
 
-import { GLOB_TESTS } from '../globs';
 import { is_in_editor_env } from '../env';
+import { GLOB_TESTS } from '../globs';
 import { interop_default } from '../utils';
 
 let _plugin_test: any;

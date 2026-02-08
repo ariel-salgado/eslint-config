@@ -1,4 +1,4 @@
-import type { OptionsRegExp, OptionsOverrides, TypedFlatConfigItem } from '../types';
+import type { OptionsOverrides, OptionsRegExp, TypedFlatConfigItem } from '../types';
 
 import { plugin_regexp } from '../plugins';
 

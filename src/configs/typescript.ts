@@ -1,18 +1,18 @@
 import type {
+	OptionsComponentExts,
 	OptionsFiles,
 	OptionsOverrides,
 	OptionsProjectType,
-	TypedFlatConfigItem,
-	OptionsComponentExts,
-	OptionsTypeScriptWithTypes,
 	OptionsTypeScriptParserOptions,
+	OptionsTypeScriptWithTypes,
+	TypedFlatConfigItem,
 } from '../types';
 
 import process from 'node:process';
 
+import { GLOB_JSX, GLOB_MARKDOWN, GLOB_TS } from '../globs';
 import { plugin_ariel } from '../plugins';
-import { rename_rules, interop_default } from '../utils';
-import { GLOB_TS, GLOB_JSX, GLOB_MARKDOWN } from '../globs';
+import { interop_default, rename_rules } from '../utils';
 
 export async function typescript(
 	options: OptionsFiles & OptionsComponentExts & OptionsOverrides & OptionsTypeScriptWithTypes & OptionsTypeScriptParserOptions & OptionsProjectType = {},

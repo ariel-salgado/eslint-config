@@ -1,7 +1,7 @@
-import type { OptionsFiles, OptionsOverrides, TypedFlatConfigItem, OptionsHasTypeScript, OptionsTypeScriptWithTypes } from '../types';
+import type { OptionsFiles, OptionsHasTypeScript, OptionsOverrides, OptionsTypeScriptWithTypes, TypedFlatConfigItem } from '../types';
 
 import { GLOB_JSX, GLOB_TSX } from '../globs';
-import { to_array, ensure_packages, interop_default } from '../utils';
+import { ensure_packages, interop_default, to_array } from '../utils';
 
 export async function solid(
 	options: OptionsHasTypeScript & OptionsOverrides & OptionsFiles & OptionsTypeScriptWithTypes = {},
