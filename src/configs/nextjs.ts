@@ -25,6 +25,16 @@ export async function nextjs(
 
 	const plugin_nextjs = await interop_default(import('@next/eslint-plugin-next'));
 
+	function get_rules(name: keyof typeof plugin_nextjs.configs): Record<string, any> {
+		const rules = plugin_nextjs.configs?.[name]?.rules;
+
+		if (!rules) {
+			throw new Error(`[@ariel-salgado/eslint-config] Failed to find config ${name} in @next/eslint-plugin-next`);
+		}
+
+		return normalize_rules(rules);
+	}
+
 	return [
 		{
 			name: 'ariel/nextjs/setup',
@@ -44,8 +54,9 @@ export async function nextjs(
 			},
 			name: 'ariel/nextjs/rules',
 			rules: {
-				...normalize_rules(plugin_nextjs.configs.recommended.rules!),
-				...normalize_rules(plugin_nextjs.configs['core-web-vitals'].rules!),
+				...get_rules('recommended'),
+				...get_rules('core-web-vitals'),
+
 				...overrides,
 			},
 			settings: {
