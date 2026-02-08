@@ -3,7 +3,7 @@ import { defineConfig } from 'tsdown';
 export default defineConfig({
 	entry: ['./src/index.ts'],
 	dts: {
-		tsconfig: './tsconfig.json',
+		tsconfig: './tsconfig.build.json',
 		tsgo: true,
 	},
 	shims: true,

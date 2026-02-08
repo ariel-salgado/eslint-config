@@ -2,7 +2,7 @@
   "name": "@ariel-salgado/eslint-config",
   "type": "module",
   "version": "0.3.1",
-  "packageManager": "pnpm@10.28.2",
+  "packageManager": "pnpm@10.29.1",
   "description": "Eslint config for @ariel-salgado.",
   "author": "Ariel Salgado <ariel.salgado.acevedo@gmail.com> (https://github.com/ariel-salgado/)",
   "license": "MIT",
