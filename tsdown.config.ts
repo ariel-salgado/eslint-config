@@ -6,6 +6,7 @@ export default defineConfig({
 		tsconfig: './tsconfig.build.json',
 		tsgo: true,
 	},
-	shims: true,
 	exports: true,
+	format: ['esm'],
+	clean: true,
 });
