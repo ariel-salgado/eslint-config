@@ -1,16 +1,17 @@
-import type { Linter } from 'eslint';
 import type { ConfigNames, RuleOptions } from './typegen';
-import type { ParserOptions } from '@typescript-eslint/parser';
-import type { FlatGitignoreOptions } from 'eslint-config-flat-gitignore';
 import type { StylisticCustomizeOptions } from '@stylistic/eslint-plugin';
+import type { ParserOptions } from '@typescript-eslint/parser';
+import type { Linter } from 'eslint';
+import type { FlatGitignoreOptions } from 'eslint-config-flat-gitignore';
+import type { ConfigWithExtends } from 'eslint-flat-config-utils';
 
 export type Awaitable<T> = T | Promise<T>;
 
 export type Rules = Record<string, Linter.RuleEntry<any> | undefined> & RuleOptions;
 
-export type { ConfigNames };
+export type { ConfigNames, RuleOptions };
 
-export type TypedFlatConfigItem = Omit<Linter.Config, 'plugins' | 'rules'> & {
+export type TypedFlatConfigItem = Omit<ConfigWithExtends, 'plugins' | 'rules'> & {
 	plugins?: Record<string, any>;
 	rules?: Rules;
 };
@@ -57,7 +58,7 @@ export interface OptionsStylistic {
 }
 
 export interface StylisticConfig
-	extends Pick<StylisticCustomizeOptions, 'indent' | 'quotes' | 'jsx' | 'semi'> {
+	extends Pick<StylisticCustomizeOptions, 'indent' | 'quotes' | 'jsx' | 'semi' | 'experimental'> {
 }
 
 export interface StylisticOptions extends StylisticConfig, OptionsOverrides { };
@@ -88,6 +89,17 @@ export interface OptionsPnpm {
 	json?: boolean;
 	yaml?: boolean;
 	sort?: boolean;
+}
+
+export interface OptionsReact extends OptionsOverrides {
+	reactCompiler?: boolean;
+}
+
+export interface OptionsBaseline {
+	level?: 'error' | 'warn';
+	baseline?: 'widely' | 'newly' | number;
+	available?: 'widely' | 'newly' | number;
+	ignoreFeatures?: string[];
 }
 
 export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType {
@@ -225,7 +237,7 @@ export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType 
 	 *
 	 * @default false
 	 */
-	react?: boolean | OptionsOverrides;
+	react?: boolean | OptionsReact;
 
 	/**
 	 * Enable nextjs rules.
@@ -285,6 +297,13 @@ export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType 
 	 * @default true
 	 */
 	autoRenamePlugins?: boolean;
+
+	/**
+	 * Enforce the Javascript baseline
+	 *
+	 * @default false
+	 */
+	baseline?: boolean | OptionsBaseline;
 
 	/**
 	 * Provide overrides for rules for each integration.
