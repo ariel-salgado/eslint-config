@@ -23,7 +23,7 @@ catalogs:
   internal:
     '@antfu/install-pkg': ^1.1.0
     '@clack/prompts': ^1.0.0
-    eslint: ^10.0.0
+    eslint: ^9.39.2
     eslint-flat-config-utils: ^3.0.1
     eslint-merge-processors: ^2.0.0
     find-up-simple: 1.0.1
