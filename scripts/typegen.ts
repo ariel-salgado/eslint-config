@@ -1,11 +1,10 @@
 import fs from 'node:fs/promises';
 
-import { builtinRules } from 'eslint/use-at-your-own-risk';
 import { flatConfigsToRulesDTS } from 'eslint-typegen/core';
+import { builtinRules } from 'eslint/use-at-your-own-risk';
+import { defineConfig } from '../src/factory';
 
-import { ariel } from '../src/factory';
-
-const configs = await ariel({
+const configs = await defineConfig({
 	imports: true,
 	jsx: {
 		a11y: true,

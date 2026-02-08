@@ -1,9 +1,11 @@
-import { ariel } from './factory';
+import { defineConfig } from './factory';
 
-export * from './globs';
-export * from './utils';
-export * from './types';
 export * from './configs';
 export * from './factory';
+export * from './globs';
+export * from './types';
+export * from './utils';
 
-export default ariel;
+export { defineConfig };
+
+export default defineConfig;
