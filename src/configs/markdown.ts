@@ -1,16 +1,18 @@
-import type { OptionsComponentExts, OptionsFiles, OptionsOverrides, TypedFlatConfigItem } from '../types';
+import type { OptionsComponentExts, OptionsFiles, OptionsMarkdown, TypedFlatConfigItem } from '../types';
 
 import { mergeProcessors, processorPassThrough } from 'eslint-merge-processors';
 import { GLOB_MARKDOWN, GLOB_MARKDOWN_CODE, GLOB_MARKDOWN_IN_MARKDOWN } from '../globs';
-import { interop_default, parser_plain } from '../utils';
+import { interop_default } from '../utils';
 
 export async function markdown(
-	options: OptionsFiles & OptionsComponentExts & OptionsOverrides = {},
+	options: OptionsFiles & OptionsComponentExts & OptionsMarkdown = {},
 ): Promise<TypedFlatConfigItem[]> {
 	const {
 		componentExts = [],
 		files = [GLOB_MARKDOWN],
+		gfm = true,
 		overrides = {},
+		overridesMarkdown = {},
 	} = options;
 
 	const markdown = await interop_default(import('@eslint/markdown'));
@@ -33,10 +35,32 @@ export async function markdown(
 		},
 		{
 			files,
-			languageOptions: {
-				parser: parser_plain,
-			},
+			language: gfm ? 'markdown/gfm' : 'markdown/commonmark',
 			name: 'ariel/markdown/parser',
+		},
+		{
+			files,
+			name: 'ariel/markdown/rules',
+			rules: {
+				...markdown.configs.recommended.at(0)?.rules,
+				'markdown/no-missing-label-refs': 'off',
+				...overridesMarkdown,
+			},
+		},
+		{
+			files,
+			name: 'ariel/markdown/disables/markdown',
+			rules: {
+				'command/command': 'off',
+				'no-irregular-whitespace': 'off',
+				'perfectionist/sort-exports': 'off',
+				'perfectionist/sort-imports': 'off',
+				'regexp/no-legacy-features': 'off',
+				'regexp/no-missing-g-flag': 'off',
+				'regexp/no-useless-dollar-replacements': 'off',
+				'regexp/no-useless-flag': 'off',
+				'style/indent': 'off',
+			},
 		},
 		{
 			files: [
@@ -50,8 +74,10 @@ export async function markdown(
 					},
 				},
 			},
-			name: 'ariel/markdown/disables',
+			name: 'ariel/markdown/disables/code',
 			rules: {
+				'ariel/no-top-level-await': 'off',
+
 				'no-alert': 'off',
 				'no-console': 'off',
 				'no-labels': 'off',

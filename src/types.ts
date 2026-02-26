@@ -95,6 +95,19 @@ export interface OptionsReact extends OptionsOverrides {
 	reactCompiler?: boolean;
 }
 
+export interface OptionsMarkdown extends OptionsOverrides {
+	/**
+	 * Enable GFM (GitHub Flavored Markdown) support.
+	 *
+	 * @default true
+	 */
+	gfm?: boolean;
+	/**
+	 * Override rules for markdown itself.
+	 */
+	overridesMarkdown?: TypedFlatConfigItem['rules'];
+}
+
 export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType {
 	/**
 	 * Enable gitignore support.
@@ -196,13 +209,13 @@ export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType 
 	toml?: boolean | OptionsOverrides;
 
 	/**
-	 * Enable linting for **code snippets** in Markdown.
+	 * Enable linting for **code snippets** in Markdown and the markdown content itself.
 	 *
 	 * For formatting Markdown content, enable also `formatters.markdown`.
 	 *
 	 * @default true
 	 */
-	markdown?: boolean | OptionsOverrides;
+	markdown?: boolean | OptionsMarkdown;
 
 	/**
 	 * Enable stylistic rules.
