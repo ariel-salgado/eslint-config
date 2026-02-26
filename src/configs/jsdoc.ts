@@ -1,5 +1,6 @@
 import type { OptionsStylistic, TypedFlatConfigItem } from '../types';
 
+import { GLOB_SRC } from '../globs';
 import { interop_default } from '../utils';
 
 export async function jsdoc(options: OptionsStylistic = {}): Promise<TypedFlatConfigItem[]> {
@@ -11,10 +12,14 @@ export async function jsdoc(options: OptionsStylistic = {}): Promise<TypedFlatCo
 
 	return [
 		{
-			name: 'ariel/jsdoc/rules',
+			name: 'ariel/jsdoc/setup',
 			plugins: {
 				jsdoc: plugin_jsdoc,
 			},
+		},
+		{
+			files: [GLOB_SRC],
+			name: 'ariel/jsdoc/rules',
 			rules: {
 				'jsdoc/check-access': 'warn',
 				'jsdoc/check-param-names': 'warn',
