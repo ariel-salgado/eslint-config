@@ -1,14 +1,19 @@
 import type { TypedFlatConfigItem } from '../types';
 
+import { GLOB_SRC } from '../globs';
 import { plugin_node } from '../plugins';
 
 export async function node(): Promise<TypedFlatConfigItem[]> {
 	return [
 		{
-			name: 'ariel/node/rules',
+			name: 'ariel/node/setup',
 			plugins: {
 				node: plugin_node,
 			},
+		},
+		{
+			files: [GLOB_SRC],
+			name: 'ariel/node/rules',
 			rules: {
 				'node/handle-callback-err': ['error', '^(err|error)$'],
 				'node/no-deprecated-api': 'error',
