@@ -10,12 +10,10 @@ export async function pnpm(
 		plugin_pnpm,
 		plugin_yaml,
 		yaml_parser,
-		jsonc_parser,
 	] = await Promise.all([
 		interop_default(import('eslint-plugin-pnpm')),
 		interop_default(import('eslint-plugin-yml')),
 		interop_default(import('yaml-eslint-parser')),
-		interop_default(import('jsonc-eslint-parser')),
 	]);
 
 	const {
@@ -34,9 +32,7 @@ export async function pnpm(
 					'package.json',
 					'**/package.json',
 				],
-				languageOptions: {
-					parser: jsonc_parser,
-				},
+				language: 'jsonc/x',
 				name: 'ariel/pnpm/package-json',
 				plugins: {
 					pnpm: plugin_pnpm,

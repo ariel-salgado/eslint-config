@@ -16,13 +16,7 @@ export async function jsonc(
 		indent = 2,
 	} = typeof stylistic === 'boolean' ? {} : stylistic;
 
-	const [
-		plugin_jsonc,
-		parser_jsonc,
-	] = await Promise.all([
-		interop_default(import('eslint-plugin-jsonc')),
-		interop_default(import('jsonc-eslint-parser')),
-	] as const);
+	const plugin_jsonc = await interop_default(import('eslint-plugin-jsonc'));
 
 	return [
 		{
@@ -33,9 +27,7 @@ export async function jsonc(
 		},
 		{
 			files,
-			languageOptions: {
-				parser: parser_jsonc,
-			},
+			language: 'jsonc/x',
 			name: 'ariel/jsonc/rules',
 			rules: {
 				'jsonc/no-bigint-literals': 'error',

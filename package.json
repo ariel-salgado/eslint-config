@@ -104,7 +104,6 @@
     "eslint-plugin-yml": "^3.3.0",
     "find-up-simple": "^1.0.1",
     "globals": "^17.3.0",
-    "jsonc-eslint-parser": "^3.1.0",
     "local-pkg": "^1.1.2",
     "toml-eslint-parser": "^1.0.3",
     "yaml-eslint-parser": "^2.0.0"
@@ -167,7 +166,6 @@
       },
       "parsers": {
         "@typescript-eslint/parser": "^8.54.0",
-        "jsonc-eslint-parser": "^2.4.2",
         "svelte-eslint-parser": "^1.4.1",
         "toml-eslint-parser": "^1.0.3",
         "yaml-eslint-parser": "^2.0.0"
