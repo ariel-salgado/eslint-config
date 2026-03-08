@@ -1,7 +1,7 @@
 {
   "name": "@ariel-salgado/eslint-config",
   "type": "module",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Eslint config for @ariel-salgado.",
   "author": "Ariel Salgado <ariel.salgado.acevedo@gmail.com> (https://github.com/ariel-salgado/)",
   "license": "MIT",
