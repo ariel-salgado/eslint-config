@@ -1,6 +1,4 @@
-// eslint-disable-next-line ts/ban-ts-comment
-// @ts-nocheck
-
+export { default as plugin_e18e } from '@e18e/eslint-plugin';
 export { default as plugin_comments } from '@eslint-community/eslint-plugin-eslint-comments';
 export { default as plugin_ignore } from 'eslint-config-flat-gitignore';
 export { default as plugin_ariel } from 'eslint-plugin-ariel';

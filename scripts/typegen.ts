@@ -1,32 +1,10 @@
-import fs from 'node:fs/promises';
-
+import { writeFile } from 'node:fs/promises';
 import { flatConfigsToRulesDTS } from 'eslint-typegen/core';
 import { builtinRules } from 'eslint/use-at-your-own-risk';
 import { defineConfig } from '../src/factory';
+import { PRESET_FULL_ON } from '../src/presets';
 
-const configs = await defineConfig({
-	imports: true,
-	jsx: {
-		a11y: true,
-	},
-	jsonc: true,
-	markdown: true,
-	nextjs: true,
-	react: true,
-	solid: true,
-	pnpm: true,
-	regexp: true,
-	stylistic: true,
-	gitignore: true,
-	svelte: true,
-	typescript: {
-		tsconfigPath: 'tsconfig.json',
-	},
-	unicorn: true,
-	yaml: true,
-	toml: true,
-	test: true,
-})
+const configs = await defineConfig(PRESET_FULL_ON)
 	.prepend(
 		{
 			plugins: {
@@ -48,4 +26,4 @@ dts += `
 export type ConfigNames = ${config_names.map(i => `'${i}'`).join(' | ')}
 `;
 
-await fs.writeFile('src/typegen.d.ts', dts);
+await writeFile('src/typegen.d.ts', dts);

@@ -34,6 +34,12 @@ export interface OptionsComponentExts {
 	componentExts?: string[];
 }
 
+export interface OptionsE18e extends OptionsOverrides {
+	modernization?: boolean;
+	moduleReplacements?: boolean;
+	performanceImprovements?: boolean;
+}
+
 export interface OptionsUnicorn extends OptionsOverrides {
 	allRecommended?: boolean;
 }
@@ -156,6 +162,13 @@ export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType 
 	 * @default auto-detect based on the dependencies
 	 */
 	typescript?: boolean | OptionsTypescript;
+
+	/**
+	 * Options for [@e18e/eslint-plugin](https://github.com/e18e/eslint-plugin)
+	 *
+	 * @default true
+	 */
+	e18e?: boolean | OptionsE18e;
 
 	/**
 	 * Enable JSX related rules.

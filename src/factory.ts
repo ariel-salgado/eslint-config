@@ -7,6 +7,7 @@ import { findUpSync } from 'find-up-simple';
 import {
 	comments,
 	disables,
+	e18e,
 	ignores,
 	imports,
 	javascript,
@@ -78,6 +79,7 @@ export function defineConfig(
 	const {
 		autoRenamePlugins = true,
 		componentExts = [],
+		e18e: enable_e18e = true,
 		gitignore: enable_git_ignore = true,
 		ignores: user_ignores = [],
 		imports: enable_imports = true,
@@ -160,6 +162,14 @@ export function defineConfig(
 			imports({
 				stylistic: stylistic_options,
 				...resolve_sub_options(options, 'imports'),
+			}),
+		);
+	}
+
+	if (enable_e18e) {
+		configs.push(
+			e18e({
+				...enable_e18e === true ? {} : enable_e18e,
 			}),
 		);
 	}
