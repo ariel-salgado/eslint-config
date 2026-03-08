@@ -7,5 +7,6 @@ export default defineConfig({
 	},
 	exports: true,
 	clean: true,
+	shims: true,
 	format: ['esm'],
 });
