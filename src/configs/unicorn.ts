@@ -2,6 +2,8 @@ import type { OptionsUnicorn, TypedFlatConfigItem } from '../types';
 
 import { plugin_unicorn } from '../plugins';
 
+const FILENAME_PATTERN = [/^[A-Z]+\..*$/, /import_map\.json/];
+
 export async function unicorn(options: OptionsUnicorn = {}): Promise<TypedFlatConfigItem[]> {
 	const {
 		allRecommended = false,
@@ -28,7 +30,7 @@ export async function unicorn(options: OptionsUnicorn = {}): Promise<TypedFlatCo
 								'error',
 								{
 									cases: { kebabCase: true, pascalCase: true },
-									ignore: [/^[A-Z]+\..*$/, /import_map\.json/],
+									ignore: FILENAME_PATTERN,
 								},
 							],
 							'unicorn/error-message': 'error',
