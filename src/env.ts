@@ -5,7 +5,7 @@ import { findUp } from 'find-up-simple';
 import { isPackageExists } from 'local-pkg';
 
 export function has_typescript(): boolean {
-	return isPackageExists('typescript');
+	return isPackageExists('typescript') || isPackageExists('@typescript/native-preview');
 };
 
 export function has_svelte(): boolean {
