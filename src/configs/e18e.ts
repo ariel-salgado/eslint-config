@@ -26,6 +26,16 @@ export async function e18e(options: OptionsE18e = {}): Promise<TypedFlatConfigIt
 				...moduleReplacements ? { ...configs.moduleReplacements!.rules } : {},
 				...performanceImprovements ? { ...configs.performanceImprovements!.rules } : {},
 				...overrides,
+
+				'e18e/prefer-array-to-reversed': 'off',
+				'e18e/prefer-array-to-sorted': 'off',
+				'e18e/prefer-array-to-spliced': 'off',
+				'e18e/prefer-spread-syntax': 'off',
+				'e18e/ban-dependencies': ['warn', {
+					allowed: [
+						'lint-staged',
+					],
+				}],
 			},
 		},
 	];
