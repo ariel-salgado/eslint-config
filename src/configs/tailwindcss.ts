@@ -12,6 +12,7 @@ export async function tailwindcss(
 		entryPoint = 'src/app.css',
 		printWidth = 100,
 		stylistic = true,
+		cwd = '.',
 	} = options;
 
 	const {
@@ -53,11 +54,13 @@ export async function tailwindcss(
 						detectComponentClasses: true,
 					},
 				],
+				'tailwincss/enforce-consistent-variant-order': 'error',
 				...overrides,
 			},
 			settings: {
 				'better-tailwindcss': {
 					entryPoint,
+					cwd,
 				},
 			},
 		},
