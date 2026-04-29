@@ -27,6 +27,8 @@ export async function e18e(options: OptionsE18e = {}): Promise<TypedFlatConfigIt
 				...performanceImprovements ? { ...configs.performanceImprovements!.rules } : {},
 				...overrides,
 
+				'e18e/prefer-array-at': 'off',
+				'e18e/prefer-array-from-map': 'off',
 				'e18e/prefer-array-to-reversed': 'off',
 				'e18e/prefer-array-to-sorted': 'off',
 				'e18e/prefer-array-to-spliced': 'off',
