@@ -97,9 +97,7 @@ export interface OptionsPnpm {
 	sort?: boolean;
 }
 
-export interface OptionsReact extends OptionsOverrides {
-	reactCompiler?: boolean;
-}
+export interface OptionsReact extends OptionsOverrides {}
 
 export interface OptionsMarkdown extends OptionsOverrides {
 	/**
@@ -251,7 +249,6 @@ export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType 
 	 *
 	 * Requires installing:
 	 * - `@eslint-react/eslint-plugin`
-	 * - `eslint-plugin-react-hooks`
 	 * - `eslint-plugin-react-refresh`
 	 *
 	 * @default false

@@ -41,7 +41,6 @@
     "eslint": "^10.0.0",
     "eslint-plugin-better-tailwindcss": ">=4.1.0",
     "eslint-plugin-jsx-a11y": ">=6.10.2",
-    "eslint-plugin-react-hooks": "^7.0.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "eslint-plugin-solid": "^0.14.3",
     "eslint-plugin-svelte": "^3.10.1",
@@ -58,9 +57,6 @@
       "optional": true
     },
     "eslint-plugin-jsx-a11y": {
-      "optional": true
-    },
-    "eslint-plugin-react-hooks": {
       "optional": true
     },
     "eslint-plugin-react-refresh": {
@@ -119,7 +115,6 @@
     "eslint": "10.2.1",
     "eslint-plugin-better-tailwindcss": "4.5.0",
     "eslint-plugin-jsx-a11y": "6.10.2",
-    "eslint-plugin-react-hooks": "7.1.1",
     "eslint-plugin-react-refresh": "0.5.2",
     "eslint-plugin-solid": "0.14.5",
     "eslint-plugin-svelte": "3.17.1",
@@ -192,7 +187,6 @@
         "eslint-plugin-no-only-tests": "^3.3.0",
         "eslint-plugin-perfectionist": "^5.5.0",
         "eslint-plugin-pnpm": "^1.5.0",
-        "eslint-plugin-react-hooks": "^7.0.1",
         "eslint-plugin-react-refresh": "^0.5.0",
         "eslint-plugin-regexp": "^3.0.0",
         "eslint-plugin-solid": "^0.14.5",

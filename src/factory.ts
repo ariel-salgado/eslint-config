@@ -50,8 +50,9 @@ const flat_config_props = [
 export const default_plugin_renaming = {
 	'@eslint-react': 'react',
 	'@eslint-react/dom': 'react-dom',
-	'@eslint-react/hooks-extra': 'react-hooks-extra',
 	'@eslint-react/naming-convention': 'react-naming-convention',
+	'@eslint-react/rsc': 'react-rsc',
+	'@eslint-react/web-api': 'react-web-api',
 	'@next/next': 'next',
 	'@stylistic': 'style',
 	'@typescript-eslint': 'ts',
