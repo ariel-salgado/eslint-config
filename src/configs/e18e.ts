@@ -1,13 +1,14 @@
-import type { OptionsE18e, TypedFlatConfigItem } from '../types';
+import type { OptionsE18e, OptionsProjectType, TypedFlatConfigItem } from '../types';
 import type { Linter } from 'eslint';
 
 import { is_in_editor_env } from '../env';
 import { plugin_e18e } from '../plugins';
 
-export async function e18e(options: OptionsE18e = {}): Promise<TypedFlatConfigItem[]> {
+export async function e18e(options: OptionsE18e & OptionsProjectType = {}): Promise<TypedFlatConfigItem[]> {
 	const {
 		modernization = true,
-		moduleReplacements = is_in_editor_env(),
+		type = 'app',
+		moduleReplacements = type === 'lib' && is_in_editor_env(),
 		overrides = {},
 		performanceImprovements = true,
 	} = options;
@@ -26,6 +27,12 @@ export async function e18e(options: OptionsE18e = {}): Promise<TypedFlatConfigIt
 				...moduleReplacements ? { ...configs.moduleReplacements!.rules } : {},
 				...performanceImprovements ? { ...configs.performanceImprovements!.rules } : {},
 				...overrides,
+
+				...(type === 'lib'
+					? {}
+					: {
+							'e18e/prefer-static-regex': 'off',
+						}),
 
 				'e18e/prefer-array-at': 'off',
 				'e18e/prefer-array-from-map': 'off',
