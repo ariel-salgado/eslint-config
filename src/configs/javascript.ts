@@ -5,7 +5,9 @@ import globals from 'globals';
 import { is_in_editor_env } from '../env';
 import { plugin_ariel, plugin_unused_imports } from '../plugins';
 
-export async function javascript(options: OptionsOverrides = {}): Promise<TypedFlatConfigItem[]> {
+export async function javascript(
+	options: OptionsOverrides = {},
+): Promise<TypedFlatConfigItem[]> {
 	const {
 		overrides = {},
 	} = options;
@@ -16,7 +18,7 @@ export async function javascript(options: OptionsOverrides = {}): Promise<TypedF
 				ecmaVersion: 'latest',
 				globals: {
 					...globals.browser,
-					...globals.es2026,
+					...globals.es2021,
 					...globals.node,
 					document: 'readonly',
 					navigator: 'readonly',
@@ -44,14 +46,15 @@ export async function javascript(options: OptionsOverrides = {}): Promise<TypedF
 			},
 			rules: {
 				'accessor-pairs': ['error', { enforceForClassMembers: true, setWithoutGet: true }],
-				'ariel/prefer-for-of': 'warn',
+
+				'ariel/no-top-level-await': 'error',
+
 				'array-callback-return': 'error',
 				'block-scoped-var': 'error',
 				'constructor-super': 'error',
 				'default-case-last': 'error',
 				'dot-notation': ['error', { allowKeywords: true }],
 				'eqeqeq': ['error', 'smart'],
-				'for-direction': 'error',
 				'new-cap': ['error', { capIsNew: false, newIsCap: true, properties: true }],
 				'no-alert': 'error',
 				'no-array-constructor': 'error',
@@ -61,9 +64,8 @@ export async function javascript(options: OptionsOverrides = {}): Promise<TypedF
 				'no-class-assign': 'error',
 				'no-compare-neg-zero': 'error',
 				'no-cond-assign': ['error', 'always'],
-				'no-console': ['warn', { allow: ['warn', 'error', 'info', 'clear'] }],
+				'no-console': ['error', { allow: ['warn', 'error'] }],
 				'no-const-assign': 'error',
-				'no-constant-binary-expression': 'error',
 				'no-control-regex': 'error',
 				'no-debugger': 'error',
 				'no-delete-var': 'error',
@@ -71,7 +73,6 @@ export async function javascript(options: OptionsOverrides = {}): Promise<TypedF
 				'no-dupe-class-members': 'error',
 				'no-dupe-keys': 'error',
 				'no-duplicate-case': 'error',
-				'no-duplicate-imports': 'off',
 				'no-empty': ['error', { allowEmptyCatch: true }],
 				'no-empty-character-class': 'error',
 				'no-empty-pattern': 'error',
@@ -90,7 +91,6 @@ export async function javascript(options: OptionsOverrides = {}): Promise<TypedF
 				'no-iterator': 'error',
 				'no-labels': ['error', { allowLoop: false, allowSwitch: false }],
 				'no-lone-blocks': 'error',
-				'no-lonely-if': 'error',
 				'no-loss-of-precision': 'error',
 				'no-misleading-character-class': 'error',
 				'no-multi-str': 'error',
@@ -122,9 +122,6 @@ export async function javascript(options: OptionsOverrides = {}): Promise<TypedF
 					'error',
 					'TSEnumDeclaration[const=true]',
 					'TSExportAssignment',
-					'ForInStatement',
-					'LabeledStatement',
-					'WithStatement',
 				],
 				'no-self-assign': ['error', { props: true }],
 				'no-self-compare': 'error',
@@ -143,14 +140,17 @@ export async function javascript(options: OptionsOverrides = {}): Promise<TypedF
 				'no-unreachable-loop': 'error',
 				'no-unsafe-finally': 'error',
 				'no-unsafe-negation': 'error',
-				'no-unsafe-optional-chaining': 'error',
 				'no-unused-expressions': ['error', {
 					allowShortCircuit: true,
 					allowTaggedTemplates: true,
 					allowTernary: true,
 				}],
-				'no-unused-private-class-members': 'error',
-				'no-unused-vars': ['off'],
+				'no-unused-vars': ['error', {
+					args: 'none',
+					caughtErrors: 'none',
+					ignoreRestSiblings: true,
+					vars: 'all',
+				}],
 				'no-use-before-define': ['error', { classes: false, functions: false, variables: true }],
 				'no-useless-backreference': 'error',
 				'no-useless-call': 'error',
@@ -190,7 +190,6 @@ export async function javascript(options: OptionsOverrides = {}): Promise<TypedF
 				'prefer-rest-params': 'error',
 				'prefer-spread': 'error',
 				'prefer-template': 'error',
-				'require-yield': 'error',
 				'symbol-description': 'error',
 				'unicode-bom': ['error', 'never'],
 				'unused-imports/no-unused-imports': is_in_editor_env() ? 'warn' : 'error',
@@ -208,6 +207,7 @@ export async function javascript(options: OptionsOverrides = {}): Promise<TypedF
 				'valid-typeof': ['error', { requireStringLiterals: true }],
 				'vars-on-top': 'error',
 				'yoda': ['error', 'never'],
+
 				...overrides,
 			},
 		},
