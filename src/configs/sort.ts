@@ -62,7 +62,6 @@ export async function sort_package_json(): Promise<TypedFlatConfigItem[]> {
 							'simple-git-hooks',
 							'lint-staged',
 							'eslintConfig',
-							'tsdown',
 						],
 						pathPattern: '^$',
 					},
@@ -85,14 +84,15 @@ export async function sort_package_json(): Promise<TypedFlatConfigItem[]> {
 					{
 						order: [
 							'types',
-							'require',
 							'import',
+							'require',
 							'default',
 						],
 						pathPattern: '^exports.*$',
 					},
 					{
 						order: [
+							// client hooks only
 							'pre-commit',
 							'prepare-commit-msg',
 							'commit-msg',
@@ -112,10 +112,10 @@ export async function sort_package_json(): Promise<TypedFlatConfigItem[]> {
 	];
 }
 
-export async function sort_ts_config(): Promise<TypedFlatConfigItem[]> {
+export function sort_ts_config(): TypedFlatConfigItem[] {
 	return [
 		{
-			files: ['**/tsconfig.json', '**/tsconfig.*.json'],
+			files: ['**/[jt]sconfig.json', '**/[jt]sconfig.*.json'],
 			name: 'ariel/sort/tsconfig-json',
 			rules: {
 				'jsonc/sort-keys': [
