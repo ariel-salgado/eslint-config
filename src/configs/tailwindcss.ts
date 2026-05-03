@@ -1,13 +1,14 @@
 import type { OptionsFiles, OptionsHasTailwindCSS, OptionsStylistic, TailwindCSSOptions, TypedFlatConfigItem } from '../types';
 
-import { GLOB_JSX, GLOB_SVELTE, GLOB_TSX } from '../globs';
+import { has_svelte } from '../env';
+import { GLOB_SVELTE } from '../globs';
 import { ensure_packages, interop_default } from '../utils';
 
 export async function tailwindcss(
 	options: OptionsHasTailwindCSS & TailwindCSSOptions & OptionsStylistic & OptionsFiles = {},
 ): Promise<TypedFlatConfigItem[]> {
 	const {
-		files = [GLOB_SVELTE, GLOB_JSX, GLOB_TSX],
+		files = [GLOB_SVELTE],
 		overrides = {},
 		entryPoint = 'src/app.css',
 		printWidth = 100,
@@ -19,11 +20,18 @@ export async function tailwindcss(
 		indent = 'tab',
 	} = typeof stylistic === 'boolean' ? {} : stylistic;
 
-	await ensure_packages([
+	const packages_to_ensure = [
 		'eslint-plugin-better-tailwindcss',
-	]);
+	];
+
+	if (has_svelte()) {
+		packages_to_ensure.push('svelte-eslint-parser');
+	}
+
+	await ensure_packages(packages_to_ensure);
 
 	const plugin_tailwindcss = await interop_default(import('eslint-plugin-better-tailwindcss'));
+	const svelte_eslint_parser = has_svelte() ? await interop_default(import('svelte-eslint-parser')) : null;
 
 	return [
 		{
@@ -35,6 +43,11 @@ export async function tailwindcss(
 		{
 			files,
 			name: 'ariel/tailwindcss/rules',
+			...(has_svelte() && {
+				languageOptions: {
+					parser: svelte_eslint_parser,
+				},
+			}),
 			rules: {
 				...plugin_tailwindcss.configs.recommended.rules,
 				'tailwindcss/enforce-consistent-line-wrapping': [
