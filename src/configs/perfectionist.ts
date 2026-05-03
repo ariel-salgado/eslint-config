@@ -22,7 +22,6 @@ export async function perfectionist(): Promise<TypedFlatConfigItem[]> {
 						newlinesBetween: 1,
 					},
 				],
-				// OCD ... Sorry ...
 				'perfectionist/sort-imports': [
 					'error',
 					{
