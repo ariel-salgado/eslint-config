@@ -18,14 +18,14 @@ Some of the main features, inherited directly from `@antfu/eslint-config`:
 ### Installation
 
 ```bash
-pnpm i -D eslint @ariel-salgado/eslint-config
+bun add -D eslint @ariel-salgado/eslint-config
 ```
 
 ### Basic usage
 
 ```js
 // eslint.config.js
-import defineConfig from '@ariel-salgado/eslint-config';
+import { defineConfig } from '@ariel-salgado/eslint-config';
 
 export default defineConfig();
 ```
