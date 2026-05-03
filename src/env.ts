@@ -9,36 +9,11 @@ export function has_typescript(): boolean {
 };
 
 export function has_svelte(): boolean {
-	return (
-		isPackageExists('svelte')
-		|| isPackageExists('@sveltejs/kit')
-	);
+	return isPackageExists('svelte');
 }
 
 export function has_tailwindcss(): boolean {
-	return (
-		isPackageExists('tailwindcss')
-		|| isPackageExists('@tailwindcss/vite')
-	);
-}
-
-export function has_react(): boolean {
-	return (
-		isPackageExists('react')
-		|| isPackageExists('react-dom')
-	);
-}
-
-export function has_nextjs(): boolean {
-	return (
-		isPackageExists('next')
-	);
-}
-
-export function has_solid(): boolean {
-	return (
-		isPackageExists('solid-js')
-	);
+	return isPackageExists('tailwindcss');
 }
 
 export async function has_pnpm_catalogs(): Promise<boolean> {
@@ -54,7 +29,7 @@ export async function has_pnpm_catalogs(): Promise<boolean> {
 
 export function is_in_git_hooks_or_lint_staged(): boolean {
 	return !!(
-		// eslint-disable-next-line no-constant-binary-expression
+
 		false
 		|| process.env.GIT_PARAMS
 		|| process.env.VSCODE_GIT_COMMAND
@@ -70,7 +45,7 @@ export function is_in_editor_env(): boolean {
 		return false;
 
 	return !!(
-		// eslint-disable-next-line no-constant-binary-expression
+
 		false
 		|| process.env.VSCODE_PID
 		|| process.env.VSCODE_CWD

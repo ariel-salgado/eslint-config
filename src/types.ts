@@ -11,47 +11,124 @@ export type Rules = Record<string, Linter.RuleEntry<any> | undefined> & RuleOpti
 
 export type { ConfigNames, RuleOptions };
 
+/**
+ * An updated version of ESLint's `Linter.Config`, which provides autocompletion
+ * for `rules` and relaxes type limitations for `plugins` and `rules`, because
+ * many plugins still lack proper type definitions.
+ */
 export type TypedFlatConfigItem = Omit<ConfigWithExtends, 'plugins' | 'rules'> & {
+	/**
+	 * An object containing a name-value mapping of plugin names to plugin objects.
+	 * When `files` is specified, these plugins are only available to the matching files.
+	 *
+	 * @see [Using plugins in your configuration](https://eslint.org/docs/latest/user-guide/configuring/configuration-files-new#using-plugins-in-your-configuration)
+	 */
 	plugins?: Record<string, any>;
+
+	/**
+	 * An object containing the configured rules. When `files` or `ignores` are
+	 * specified, these rule configurations are only available to the matching files.
+	 */
 	rules?: Rules;
 };
 
 export interface OptionsFiles {
+	/**
+	 * Override the `files` option to provide custom globs.
+	 */
 	files?: string[];
 }
 
-export interface OptionsJSXA11y extends OptionsOverrides { }
-
-export interface OptionsJSX {
-	a11y?: boolean | OptionsJSXA11y;
-}
-
 export type OptionsTypescript
-	= (OptionsTypeScriptWithTypes & OptionsOverrides)
-		| (OptionsTypeScriptParserOptions & OptionsOverrides);
+	= (OptionsTypeScriptWithTypes & OptionsOverrides & OptionsTypeScriptErasableOnly)
+		| (OptionsTypeScriptParserOptions & OptionsOverrides & OptionsTypeScriptErasableOnly);
 
 export interface OptionsComponentExts {
+	/**
+	 * Additional extensions for components.
+	 *
+	 * @example ['vue']
+	 * @default []
+	 */
 	componentExts?: string[];
 }
 
 export interface OptionsE18e extends OptionsOverrides {
+	/**
+	 * Include modernization rules
+	 *
+	 * @see https://github.com/e18e/eslint-plugin#modernization
+	 * @default true
+	 */
 	modernization?: boolean;
+	/**
+	 * Include module replacements rules
+	 *
+	 * @see https://github.com/e18e/eslint-plugin#module-replacements
+	 * @default type === 'lib' && isInEditor
+	 */
 	moduleReplacements?: boolean;
+	/**
+	 * Include performance improvements rules
+	 *
+	 * @see https://github.com/e18e/eslint-plugin#performance-improvements
+	 * @default true
+	 */
 	performanceImprovements?: boolean;
 }
 
 export interface OptionsUnicorn extends OptionsOverrides {
+	/**
+	 * Include all rules recommended by `eslint-plugin-unicorn`, instead of only ones picked by Anthony.
+	 *
+	 * @default false
+	 */
 	allRecommended?: boolean;
 }
 
+export interface OptionsMarkdown extends OptionsOverrides {
+	/**
+	 * Enable GFM (GitHub Flavored Markdown) support.
+	 *
+	 * @default true
+	 */
+	gfm?: boolean;
+
+	/**
+	 * Override rules for markdown itself.
+	 */
+	overridesMarkdown?: TypedFlatConfigItem['rules'];
+}
+
 export interface OptionsTypeScriptParserOptions {
+	/**
+	 * Additional parser options for TypeScript.
+	 */
 	parserOptions?: Partial<ParserOptions>;
+
+	/**
+	 * Glob patterns for files that should be type aware.
+	 * @default ['**\/*.{ts,tsx}']
+	 */
 	filesTypeAware?: string[];
+
+	/**
+	 * Glob patterns for files that should not be type aware.
+	 * @default ['**\/*.md\/**', '**\/*.astro/*.ts']
+	 */
 	ignoresTypeAware?: string[];
-};
+}
 
 export interface OptionsTypeScriptWithTypes {
+	/**
+	 * When this options is provided, type aware rules will be enabled.
+	 * @see https://typescript-eslint.io/linting/typed-linting/
+	 */
 	tsconfigPath?: string;
+
+	/**
+	 * Override type aware rules.
+	 */
 	overridesTypeAware?: TypedFlatConfigItem['rules'];
 }
 
@@ -64,53 +141,77 @@ export interface OptionsStylistic {
 }
 
 export interface StylisticConfig
-	extends Pick<StylisticCustomizeOptions, 'indent' | 'quotes' | 'jsx' | 'semi' | 'experimental'> {
+	extends Pick<StylisticCustomizeOptions, 'indent' | 'quotes' | 'semi' | 'experimental'> {
 }
 
-export interface StylisticOptions extends StylisticConfig, OptionsOverrides { };
+export interface OptionsHasTailwindCSS extends OptionsOverrides {
+	tailwindcss?: boolean;
+}
+
+export interface TailwindCSSOptions {
+	entryPoint?: string;
+	printWidth?: number;
+	cwd?: string;
+}
 
 export interface OptionsOverrides {
 	overrides?: TypedFlatConfigItem['rules'];
 }
 
-export interface OptionsHasTailwindCSS {
-	tailwindcss?: boolean;
-}
-
-export interface TailwindCSSOptions extends OptionsOverrides {
-	entryPoint?: string;
-	printWidth?: number;
-	cwd?: string;
-};
-
 export interface OptionsProjectType {
+	/**
+	 * Type of the project. `lib` will enable more strict rules for libraries.
+	 *
+	 * @default 'app'
+	 */
 	type?: 'app' | 'lib';
 }
 
+export interface OptionsTypeScriptErasableOnly {
+	/**
+	 * Enable erasable syntax only rules.
+	 *
+	 * @see https://github.com/JoshuaKGoldberg/eslint-plugin-erasable-syntax-only
+	 * @default false
+	 */
+	erasableOnly?: boolean;
+}
+
 export interface OptionsRegExp {
+	/**
+	 * Override rulelevels
+	 */
 	level?: 'error' | 'warn';
 }
 
 export interface OptionsPnpm {
-	catalogs?: boolean;
-	json?: boolean;
-	yaml?: boolean;
-	sort?: boolean;
-}
-
-export interface OptionsReact extends OptionsOverrides {}
-
-export interface OptionsMarkdown extends OptionsOverrides {
 	/**
-	 * Enable GFM (GitHub Flavored Markdown) support.
+	 * Requires catalogs usage
+	 *
+	 * Detects automatically based if `catalogs` is used in the pnpm-workspace.yaml file
+	 */
+	catalogs?: boolean;
+
+	/**
+	 * Enable linting for package.json, will install the jsonc parser
 	 *
 	 * @default true
 	 */
-	gfm?: boolean;
+	json?: boolean;
+
 	/**
-	 * Override rules for markdown itself.
+	 * Enable linting for pnpm-workspace.yaml, will install the yaml parser
+	 *
+	 * @default true
 	 */
-	overridesMarkdown?: TypedFlatConfigItem['rules'];
+	yaml?: boolean;
+
+	/**
+	 * Sort entries in pnpm-workspace.yaml
+	 *
+	 * @default false
+	 */
+	sort?: boolean;
 }
 
 export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType {
@@ -170,15 +271,6 @@ export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType 
 	e18e?: boolean | OptionsE18e;
 
 	/**
-	 * Enable JSX related rules.
-	 *
-	 * Passing an object to enable JSX accessibility rules.
-	 *
-	 * @default true
-	 */
-	jsx?: boolean | OptionsJSX;
-
-	/**
 	 * Options for eslint-plugin-unicorn.
 	 *
 	 * @default true
@@ -235,7 +327,7 @@ export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType 
 	 * @see https://eslint.style/
 	 * @default true
 	 */
-	stylistic?: boolean | StylisticOptions;
+	stylistic?: boolean | (StylisticConfig & OptionsOverrides);
 
 	/**
 	 * Enable regexp rules.
@@ -244,37 +336,6 @@ export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType 
 	 * @default true
 	 */
 	regexp?: boolean | (OptionsRegExp & OptionsOverrides);
-
-	/**
-	 * Enable react rules.
-	 *
-	 * Requires installing:
-	 * - `@eslint-react/eslint-plugin`
-	 * - `eslint-plugin-react-refresh`
-	 *
-	 * @default false
-	 */
-	react?: boolean | OptionsReact;
-
-	/**
-	 * Enable nextjs rules.
-	 *
-	 * Requires installing:
-	 * - `@next/eslint-plugin-next`
-	 *
-	 * @default false
-	 */
-	nextjs?: boolean | OptionsOverrides;
-
-	/**
-	 * Enable solid rules.
-	 *
-	 * Requires installing:
-	 * - `eslint-plugin-solid`
-	 *
-	 * @default false
-	 */
-	solid?: boolean | OptionsOverrides;
 
 	/**
 	 * Enable svelte rules.
@@ -294,7 +355,7 @@ export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType 
 	 *
 	 * @default false
 	 */
-	tailwindcss?: boolean | TailwindCSSOptions;
+	tailwindcss?: boolean | OptionsHasTailwindCSS;
 
 	/**
 	 * Enable pnpm (workspace/catalogs) support.
@@ -329,8 +390,6 @@ export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType 
 		markdown?: TypedFlatConfigItem['rules'];
 		yaml?: TypedFlatConfigItem['rules'];
 		toml?: TypedFlatConfigItem['rules'];
-		react?: TypedFlatConfigItem['rules'];
 		svelte?: TypedFlatConfigItem['rules'];
-		tailwindcss?: TypedFlatConfigItem['rules'];
 	};
 }
