@@ -5,14 +5,8 @@ import { plugin_morgan } from '../plugins';
 export async function morgan(): Promise<TypedFlatConfigItem[]> {
 	return [
 		{
+			...plugin_morgan.configs.recommended,
 			name: 'ariel/morgan/rules',
-			plugins: {
-				morgan: plugin_morgan,
-			},
-			rules: {
-				'morgan/no-negated-conjunction': 'error',
-				'morgan/no-negated-disjunction': 'error',
-			},
 		},
 	];
 }
