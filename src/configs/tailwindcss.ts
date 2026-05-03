@@ -67,7 +67,7 @@ export async function tailwindcss(
 						detectComponentClasses: true,
 					},
 				],
-				'tailwincss/enforce-consistent-variant-order': 'error',
+				'tailwindcss/enforce-consistent-variant-order': 'error',
 				...overrides,
 			},
 			settings: {
