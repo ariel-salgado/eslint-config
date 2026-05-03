@@ -1,5 +1,7 @@
 import type { Awaitable, TypedFlatConfigItem } from './types';
 
+import process from 'node:process';
+
 import { fileURLToPath } from 'node:url';
 import { isPackageExists } from 'local-pkg';
 
@@ -27,11 +29,32 @@ export const parser_plain = {
 	}),
 };
 
+/**
+ * Combine array and non-array configs into a single array.
+ */
 export async function combine(...configs: Awaitable<TypedFlatConfigItem | TypedFlatConfigItem[]>[]): Promise<TypedFlatConfigItem[]> {
 	const resolved = await Promise.all(configs);
 	return resolved.flat();
 }
 
+/**
+ * Rename plugin prefixes in a rule object.
+ * Accepts a map of prefixes to rename.
+ *
+ * @example
+ * ```ts
+ * import { rename_rules } from '@ariel-salgado/eslint-config'
+ *
+ * export default [{
+ *   rules: rename_rules(
+ *     {
+ *       '@typescript-eslint/indent': 'error'
+ *     },
+ *     { '@typescript-eslint': 'ts' }
+ *   )
+ * }]
+ * ```
+ */
 export function rename_rules(
 	rules: Record<string, any>,
 	map: Record<string, string>,
@@ -48,6 +71,20 @@ export function rename_rules(
 	);
 }
 
+/**
+ * Rename plugin names a flat configs array
+ *
+ * @example
+ * ```ts
+ * import { rename_plugin_in_configs } from '@antfu/eslint-config'
+ * import someConfigs from './some-configs'
+ *
+ * export default rename_plugin_in_configs(someConfigs, {
+ *   '@typescript-eslint': 'ts',
+ *   '@stylistic': 'style',
+ * })
+ * ```
+ */
 export function rename_plugin_in_configs(configs: TypedFlatConfigItem[], map: Record<string, string>): TypedFlatConfigItem[] {
 	return configs.map((i) => {
 		const clone = { ...i };
