@@ -1,28 +1,26 @@
-import type { StylisticConfig, StylisticOptions, TypedFlatConfigItem } from '../types';
+import type { OptionsOverrides, StylisticConfig, TypedFlatConfigItem } from '../types';
 
 import { plugin_ariel } from '../plugins';
 import { interop_default } from '../utils';
 
-export const defaults: StylisticConfig = {
+export const StylisticConfigDefaults: StylisticConfig = {
 	experimental: false,
 	indent: 'tab',
-	jsx: true,
 	quotes: 'single',
 	semi: true,
 };
 
 export async function stylistic(
-	options: StylisticOptions = {},
+	options: StylisticConfig & OptionsOverrides = {},
 ): Promise<TypedFlatConfigItem[]> {
 	const {
 		experimental,
 		indent,
-		jsx,
 		overrides = {},
 		quotes,
 		semi,
 	} = {
-		...defaults,
+		...StylisticConfigDefaults,
 		...options,
 	};
 
@@ -31,7 +29,6 @@ export async function stylistic(
 	const config = plugin_stylistic.configs.customize({
 		experimental,
 		indent,
-		jsx,
 		pluginName: 'style',
 		quotes,
 		semi,
@@ -53,9 +50,11 @@ export async function stylistic(
 							'ariel/consistent-list-newline': 'error',
 						},
 
+				'ariel/consistent-chaining': 'error',
+
 				'ariel/curly': 'error',
 				'ariel/if-newline': 'error',
-				'ariel/consistent-chaining': 'error',
+				'ariel/top-level-function': 'error',
 
 				'style/generator-star-spacing': ['error', { after: true, before: false }],
 				'style/yield-star-spacing': ['error', { after: true, before: false }],

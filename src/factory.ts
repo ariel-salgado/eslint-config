@@ -3,7 +3,6 @@ import type { Awaitable, ConfigNames, OptionsConfig, TypedFlatConfigItem } from 
 import type { Linter } from 'eslint';
 
 import { FlatConfigComposer } from 'eslint-flat-config-utils';
-import { findUpSync } from 'find-up-simple';
 import {
 	comments,
 	disables,
@@ -13,16 +12,11 @@ import {
 	javascript,
 	jsdoc,
 	jsonc,
-	jsx,
 	markdown,
 	morgan,
-	nextjs,
 	node,
 	perfectionist,
 	pnpm,
-	react,
-	regexp,
-	solid,
 	sort_package_json,
 	sort_ts_config,
 	stylistic,
@@ -34,7 +28,9 @@ import {
 	unicorn,
 	yaml,
 } from './configs';
-import { has_nextjs, has_react, has_solid, has_svelte, has_tailwindcss, has_typescript, is_in_editor_env } from './env';
+import { regexp } from './configs/regexp';
+import { has_pnpm_catalogs, has_svelte, has_tailwindcss, has_typescript, is_in_editor_env } from './env';
+import { GLOB_MARKDOWN } from './globs';
 import { interop_default } from './utils';
 
 const flat_config_props = [
@@ -48,15 +44,9 @@ const flat_config_props = [
 ] satisfies (keyof TypedFlatConfigItem)[];
 
 export const default_plugin_renaming = {
-	'@eslint-react': 'react',
-	'@eslint-react/dom': 'react-dom',
-	'@eslint-react/naming-convention': 'react-naming-convention',
-	'@eslint-react/rsc': 'react-rsc',
-	'@eslint-react/web-api': 'react-web-api',
-	'@next/next': 'next',
+	'better-tailwindcss': 'tailwindcss',
 	'@stylistic': 'style',
 	'@typescript-eslint': 'ts',
-	'better-tailwindcss': 'tailwindcss',
 	'import-lite': 'import',
 	'n': 'node',
 	'vitest': 'test',
@@ -80,30 +70,22 @@ export function defineConfig(
 	const {
 		autoRenamePlugins = true,
 		componentExts = [],
-		e18e: enable_e18e = true,
-		gitignore: enable_git_ignore = true,
-		ignores: user_ignores = [],
-		imports: enable_imports = true,
-		jsdoc: enable_jsdoc = true,
-		jsx: enable_jsx = has_react() || has_nextjs() || has_solid(),
-		nextjs: enable_nextjs = has_nextjs(),
-		node: enable_node = true,
-		pnpm: enable_catalogs = !!findUpSync('pnpm-workspace.yaml'),
-		react: enable_react = has_react(),
-		regexp: enable_regexp = true,
-		solid: enable_solid = has_solid(),
-		svelte: enable_svelte = has_svelte(),
-		tailwindcss: enable_tailwindcss = has_tailwindcss(),
-		typescript: enable_typescript = has_typescript(),
-		unicorn: enable_unicorn = true,
+		e18e: enableE18e = true,
+		gitignore: enableGitignore = true,
+		ignores: userIgnores = [],
+		imports: enableImports = true,
+		jsdoc: enableJsdoc = true,
+		node: enableNode = true,
+		pnpm: enableCatalogs = has_pnpm_catalogs(),
+		regexp: enableRegexp = true,
+		svelte: enableSvelte = has_svelte(),
+		tailwindcss: enableTailwindcss = has_tailwindcss(),
+		type: appType = 'app',
+		typescript: enableTypeScript = has_typescript(),
+		unicorn: enableUnicorn = true,
 	} = options;
 
 	const is_in_editor = is_in_editor_env();
-
-	if (is_in_editor) {
-		// eslint-disable-next-line no-console
-		console.log('[@ariel-salgado/eslint-config] Detected running in editor, some rules are disabled.');
-	}
 
 	const stylistic_options = options.stylistic === false
 		? false
@@ -111,31 +93,31 @@ export function defineConfig(
 			? options.stylistic
 			: {};
 
-	if (stylistic_options && !('jsx' in stylistic_options))
-		stylistic_options.jsx = typeof enable_jsx === 'object' ? true : enable_jsx;
-
 	const configs: Awaitable<TypedFlatConfigItem[]>[] = [];
 
-	if (enable_git_ignore) {
-		if (typeof enable_git_ignore !== 'boolean') {
-			configs.push(interop_default(import('eslint-config-flat-gitignore')).then(r => [r({
-				name: 'ariel/gitignore',
-				...enable_git_ignore,
-			})]));
+	if (enableGitignore) {
+		if (typeof enableGitignore !== 'boolean') {
+			configs.push(
+				interop_default(import('eslint-config-flat-gitignore')).then(r => [r({
+					name: 'ariel/gitignore',
+					...enableGitignore,
+				})]),
+			);
 		}
 		else {
-			configs.push(interop_default(import('eslint-config-flat-gitignore')).then(r => [r({
-				name: 'ariel/gitignore',
-				strict: false,
-			})]));
+			configs.push(
+				interop_default(import('eslint-config-flat-gitignore')).then(r => [r({
+					name: 'ariel/gitignore',
+					strict: false,
+				})]),
+			);
 		}
 	}
 
 	const typescript_options = resolve_sub_options(options, 'typescript');
-	const tsconfig_path = 'tsconfigPath' in typescript_options ? typescript_options.tsconfigPath : undefined;
 
 	configs.push(
-		ignores(user_ignores),
+		ignores(userIgnores, !enableTypeScript),
 		javascript({
 			overrides: get_overrides(options, 'javascript'),
 		}),
@@ -144,13 +126,13 @@ export function defineConfig(
 		morgan(),
 	);
 
-	if (enable_node) {
+	if (enableNode) {
 		configs.push(
 			node(),
 		);
 	}
 
-	if (enable_jsdoc) {
+	if (enableJsdoc) {
 		configs.push(
 			jsdoc({
 				stylistic: stylistic_options,
@@ -158,7 +140,7 @@ export function defineConfig(
 		);
 	}
 
-	if (enable_imports) {
+	if (enableImports) {
 		configs.push(
 			imports({
 				stylistic: stylistic_options,
@@ -167,84 +149,71 @@ export function defineConfig(
 		);
 	}
 
-	if (enable_e18e) {
+	if (enableE18e) {
 		configs.push(
 			e18e({
-				...enable_e18e === true ? {} : enable_e18e,
+				...enableE18e === true ? {} : enableE18e,
 			}),
 		);
 	}
 
-	if (enable_unicorn) {
-		configs.push(unicorn(enable_unicorn === true ? {} : enable_unicorn));
+	if (enableUnicorn) {
+		configs.push(
+			unicorn(enableUnicorn === true ? {} : enableUnicorn),
+		);
 	}
 
-	if (enable_jsx) {
-		configs.push(jsx(enable_jsx === true ? {} : enable_jsx));
-	}
-
-	if (enable_typescript) {
-		configs.push(typescript({
-			...typescript_options,
-			componentExts,
-			overrides: get_overrides(options, 'typescript'),
-			type: options.type,
-		}));
+	if (enableTypeScript) {
+		configs.push(
+			typescript({
+				...typescript_options,
+				componentExts,
+				overrides: get_overrides(options, 'typescript'),
+				type: appType,
+			}),
+		);
 	}
 
 	if (stylistic_options) {
-		configs.push(stylistic({
-			...stylistic_options,
-			overrides: get_overrides(options, 'stylistic'),
-		}));
+		configs.push(
+			stylistic({
+				...stylistic_options,
+				overrides: get_overrides(options, 'stylistic'),
+			}),
+		);
 	}
 
-	if (enable_regexp) {
-		configs.push(regexp(typeof enable_regexp === 'boolean' ? {} : enable_regexp));
+	if (enableRegexp) {
+		configs.push(
+			regexp(typeof enableRegexp === 'boolean' ? {} : enableRegexp),
+		);
 	}
 
 	if (options.test ?? true) {
-		configs.push(test({
-			overrides: get_overrides(options, 'test'),
-		}));
+		configs.push(
+			test({
+				overrides: get_overrides(options, 'test'),
+			}),
+		);
 	}
 
-	if (enable_react) {
-		configs.push(react({
-			...typescript_options,
-			...resolve_sub_options(options, 'react'),
-			overrides: get_overrides(options, 'react'),
-			tsconfigPath: tsconfig_path,
-		}));
+	if (enableSvelte) {
+		configs.push(
+			svelte({
+				overrides: get_overrides(options, 'svelte'),
+				stylistic: stylistic_options,
+				typescript: !!enableTypeScript,
+			}),
+		);
 	}
 
-	if (enable_nextjs) {
-		configs.push(nextjs({
-			overrides: get_overrides(options, 'nextjs'),
-		}));
-	}
-
-	if (enable_solid) {
-		configs.push(solid({
-			overrides: get_overrides(options, 'solid'),
-			tsconfigPath: tsconfig_path,
-			typescript: !!enable_typescript,
-		}));
-	}
-
-	if (enable_svelte) {
-		configs.push(svelte({
-			overrides: get_overrides(options, 'svelte'),
-			stylistic: stylistic_options,
-			typescript: !!enable_typescript,
-		}));
-	}
-
-	if (enable_tailwindcss) {
-		configs.push(tailwindcss({
-			overrides: get_overrides(options, 'tailwindcss'),
-			stylistic: stylistic_options,
-		}));
+	if (enableTailwindcss) {
+		configs.push(
+			tailwindcss({
+				overrides: get_overrides(options, 'tailwindcss'),
+				stylistic: stylistic_options,
+			}),
+		);
 	}
 
 	if (options.jsonc ?? true) {
@@ -258,38 +227,41 @@ export function defineConfig(
 		);
 	}
 
-	if (enable_catalogs) {
+	if (enableCatalogs) {
+		const optionsPnpm = resolve_sub_options(options, 'pnpm');
 		configs.push(
 			pnpm({
 				json: options.jsonc !== false,
 				yaml: options.yaml !== false,
-				...resolve_sub_options(options, 'pnpm'),
+				...optionsPnpm,
 			}),
 		);
 	}
 
 	if (options.yaml ?? true) {
-		configs.push(yaml({
-			overrides: get_overrides(options, 'yaml'),
-			stylistic: stylistic_options,
-		}));
+		configs.push(
+			yaml({
+				overrides: get_overrides(options, 'yaml'),
+				stylistic: stylistic_options,
+			}),
+		);
 	}
 
 	if (options.toml ?? true) {
-		configs.push(toml({
-			overrides: get_overrides(options, 'toml'),
-			stylistic: stylistic_options,
-		}));
+		configs.push(
+			toml({
+				overrides: get_overrides(options, 'toml'),
+				stylistic: stylistic_options,
+			}),
+		);
 	}
 
 	if (options.markdown ?? true) {
 		configs.push(
-			markdown(
-				{
-					componentExts,
-					overrides: get_overrides(options, 'markdown'),
-				},
-			),
+			markdown({
+				componentExts,
+				overrides: get_overrides(options, 'markdown'),
+			}),
 		);
 	}
 
@@ -301,13 +273,13 @@ export function defineConfig(
 		throw new Error('[@ariel-salgado/eslint-config] The first argument should not contain the "files" property as the options are supposed to be global. Place it in the second or later config instead.');
 	}
 
-	const merged_config = flat_config_props.reduce((acc, key) => {
+	const fused_config = flat_config_props.reduce((acc, key) => {
 		if (key in options)
 			acc[key] = options[key] as any;
 		return acc;
 	}, {} as TypedFlatConfigItem);
-	if (Object.keys(merged_config).length)
-		configs.push([merged_config]);
+	if (Object.keys(fused_config).length)
+		configs.push([fused_config]);
 
 	let composer = new FlatConfigComposer<TypedFlatConfigItem, ConfigNames>();
 
@@ -316,6 +288,12 @@ export function defineConfig(
 			...configs,
 			...userConfigs as any,
 		);
+
+	if (options.markdown ?? true) {
+		composer = composer.append({
+			ignores: [GLOB_MARKDOWN],
+		});
+	}
 
 	if (autoRenamePlugins) {
 		composer = composer
