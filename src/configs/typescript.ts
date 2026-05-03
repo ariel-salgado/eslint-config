@@ -1,24 +1,28 @@
 import type {
 	OptionsComponentExts,
+
 	OptionsFiles,
 	OptionsOverrides,
 	OptionsProjectType,
+	OptionsTypeScriptErasableOnly,
 	OptionsTypeScriptParserOptions,
 	OptionsTypeScriptWithTypes,
 	TypedFlatConfigItem,
 } from '../types';
+import type { Linter } from 'eslint';
 
 import process from 'node:process';
 
-import { GLOB_JSX, GLOB_MARKDOWN, GLOB_TS } from '../globs';
+import { GLOB_MARKDOWN, GLOB_TS } from '../globs';
 import { plugin_ariel } from '../plugins';
 import { interop_default, rename_rules } from '../utils';
 
 export async function typescript(
-	options: OptionsFiles & OptionsComponentExts & OptionsOverrides & OptionsTypeScriptWithTypes & OptionsTypeScriptParserOptions & OptionsProjectType = {},
+	options: OptionsFiles & OptionsComponentExts & OptionsOverrides & OptionsTypeScriptWithTypes & OptionsTypeScriptParserOptions & OptionsProjectType & OptionsTypeScriptErasableOnly = {},
 ): Promise<TypedFlatConfigItem[]> {
 	const {
 		componentExts = [],
+		erasableOnly = false,
 		overrides = {},
 		overridesTypeAware = {},
 		parserOptions = {},
@@ -27,14 +31,11 @@ export async function typescript(
 
 	const files = options.files ?? [
 		GLOB_TS,
-		GLOB_JSX,
 		...componentExts.map(ext => `**/*.${ext}`),
 	];
 
-	const files_type_aware = options.filesTypeAware ?? [GLOB_TS, GLOB_JSX];
-	const ignores_type_aware = options.ignoresTypeAware ?? [
-		`${GLOB_MARKDOWN}/**`,
-	];
+	const files_type_aware = options.filesTypeAware ?? [GLOB_TS];
+	const ignores_type_aware = options.ignoresTypeAware ?? [`${GLOB_MARKDOWN}/**`];
 	const tsconfig_path = options?.tsconfigPath
 		? options.tsconfigPath
 		: undefined;
@@ -72,7 +73,7 @@ export async function typescript(
 		interop_default(import('@typescript-eslint/parser')),
 	] as const);
 
-	function make_parser(type_aware: boolean, files: string[], ignores?: string[]): TypedFlatConfigItem {
+	function make_parser(typeAware: boolean, files: string[], ignores?: string[]): TypedFlatConfigItem {
 		return {
 			files,
 			...ignores ? { ignores } : {},
@@ -81,7 +82,7 @@ export async function typescript(
 				parserOptions: {
 					extraFileExtensions: componentExts.map(ext => `.${ext}`),
 					sourceType: 'module',
-					...type_aware
+					...typeAware
 						? {
 								projectService: {
 									allowDefaultProject: ['./*.js'],
@@ -90,10 +91,10 @@ export async function typescript(
 								tsconfigRootDir: process.cwd(),
 							}
 						: {},
-					...parserOptions,
+					...parserOptions as any,
 				},
 			},
-			name: `ariel/typescript/${type_aware ? 'type-aware-parser' : 'parser'}`,
+			name: `ariel/typescript/${typeAware ? 'type-aware-parser' : 'parser'}`,
 		};
 	}
 
@@ -128,7 +129,7 @@ export async function typescript(
 				'no-dupe-class-members': 'off',
 				'no-redeclare': 'off',
 				'no-use-before-define': 'off',
-				'no-useless-constructor': 'error',
+				'no-useless-constructor': 'off',
 				'ts/ban-ts-comment': ['error', { 'ts-expect-error': 'allow-with-description' }],
 				'ts/consistent-type-definitions': ['error', 'interface'],
 				'ts/consistent-type-imports': ['error', {
@@ -183,6 +184,22 @@ export async function typescript(
 						...overridesTypeAware,
 					},
 				}]
+			: [],
+		...erasableOnly
+			? [
+					{
+						name: 'ariel/typescript/erasable-syntax-only',
+						plugins: {
+							'erasable-syntax-only': await interop_default(import('eslint-plugin-erasable-syntax-only')),
+						},
+						rules: {
+							'erasable-syntax-only/enums': 'error',
+							'erasable-syntax-only/import-aliases': 'error',
+							'erasable-syntax-only/namespaces': 'error',
+							'erasable-syntax-only/parameter-properties': 'error',
+						} as Record<string, Linter.RuleEntry>,
+					},
+				]
 			: [],
 	];
 }
