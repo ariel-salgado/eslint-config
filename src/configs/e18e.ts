@@ -1,5 +1,4 @@
 import type { OptionsE18e, OptionsProjectType, TypedFlatConfigItem } from '../types';
-import type { Linter } from 'eslint';
 
 import { is_in_editor_env } from '../env';
 import { plugin_e18e } from '../plugins';
@@ -13,8 +12,7 @@ export async function e18e(options: OptionsE18e & OptionsProjectType = {}): Prom
 		performanceImprovements = true,
 	} = options;
 
-	// TODO: better type needed on the e18e side
-	const configs = plugin_e18e.configs as Record<string, Linter.Config>;
+	const configs = plugin_e18e.configs;
 
 	return [
 		{
@@ -26,7 +24,6 @@ export async function e18e(options: OptionsE18e & OptionsProjectType = {}): Prom
 				...modernization ? { ...configs.modernization.rules } : {},
 				...moduleReplacements ? { ...configs.moduleReplacements!.rules } : {},
 				...performanceImprovements ? { ...configs.performanceImprovements!.rules } : {},
-				...overrides,
 
 				...(type === 'lib'
 					? {}
@@ -40,11 +37,16 @@ export async function e18e(options: OptionsE18e & OptionsProjectType = {}): Prom
 				'e18e/prefer-array-to-sorted': 'off',
 				'e18e/prefer-array-to-spliced': 'off',
 				'e18e/prefer-spread-syntax': 'off',
-				'e18e/ban-dependencies': ['warn', {
-					allowed: [
-						'lint-staged',
-					],
-				}],
+				'e18e/ban-dependencies': [
+					'error',
+					{
+						allowed: [
+							'lint-staged',
+						],
+					},
+				],
+
+				...overrides,
 			},
 		},
 	];
