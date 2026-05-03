@@ -2,14 +2,11 @@ import type { OptionsUnicorn, TypedFlatConfigItem } from '../types';
 
 import { plugin_unicorn } from '../plugins';
 
-const FILENAME_PATTERN = [/^[A-Z]+\..*$/, /import_map\.json/];
-
 export async function unicorn(options: OptionsUnicorn = {}): Promise<TypedFlatConfigItem[]> {
 	const {
 		allRecommended = false,
 		overrides = {},
 	} = options;
-
 	return [
 		{
 			name: 'ariel/unicorn/rules',
@@ -18,33 +15,16 @@ export async function unicorn(options: OptionsUnicorn = {}): Promise<TypedFlatCo
 			},
 			rules: {
 				...(allRecommended
-					? plugin_unicorn.configs.recommended.rules
+					? plugin_unicorn.configs.recommended.rules as any
 					: {
 							'unicorn/consistent-empty-array-spread': 'error',
-							'unicorn/consistent-function-scoping': [
-								'error',
-								{ checkArrowFunctions: false },
-							],
-							'unicorn/custom-error-definition': 'error',
-							'unicorn/filename-case': [
-								'error',
-								{
-									cases: { kebabCase: true, pascalCase: true },
-									ignore: FILENAME_PATTERN,
-								},
-							],
 							'unicorn/error-message': 'error',
 							'unicorn/escape-case': 'error',
 							'unicorn/new-for-builtins': 'error',
 							'unicorn/no-instanceof-builtins': 'error',
 							'unicorn/no-new-array': 'error',
 							'unicorn/no-new-buffer': 'error',
-							'unicorn/no-useless-undefined': [
-								'error',
-								{ checkArguments: false, checkArrowFunctionBody: false },
-							],
 							'unicorn/number-literal-case': 'error',
-							'unicorn/prefer-classlist-toggle': 'error',
 							'unicorn/prefer-dom-node-text-content': 'error',
 							'unicorn/prefer-includes': 'error',
 							'unicorn/prefer-node-protocol': 'error',
