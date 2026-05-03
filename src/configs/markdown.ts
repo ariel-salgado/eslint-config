@@ -49,21 +49,6 @@ export async function markdown(
 			},
 		},
 		{
-			files,
-			name: 'ariel/markdown/disables/markdown',
-			rules: {
-				'command/command': 'off',
-				'no-irregular-whitespace': 'off',
-				'perfectionist/sort-exports': 'off',
-				'perfectionist/sort-imports': 'off',
-				'regexp/no-legacy-features': 'off',
-				'regexp/no-missing-g-flag': 'off',
-				'regexp/no-useless-dollar-replacements': 'off',
-				'regexp/no-useless-flag': 'off',
-				'style/indent': 'off',
-			},
-		},
-		{
 			files: [
 				GLOB_MARKDOWN_CODE,
 				...componentExts.map(ext => `${GLOB_MARKDOWN}/**/*.${ext}`),
@@ -79,6 +64,8 @@ export async function markdown(
 			rules: {
 				'ariel/no-top-level-await': 'off',
 
+				'e18e/prefer-static-regex': 'off',
+
 				'no-alert': 'off',
 				'no-console': 'off',
 				'no-labels': 'off',
@@ -87,6 +74,7 @@ export async function markdown(
 				'no-undef': 'off',
 				'no-unused-expressions': 'off',
 				'no-unused-labels': 'off',
+
 				'no-unused-vars': 'off',
 
 				'node/prefer-global/process': 'off',
