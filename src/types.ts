@@ -355,7 +355,7 @@ export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType 
 	 *
 	 * @default false
 	 */
-	tailwindcss?: boolean | OptionsHasTailwindCSS;
+	tailwindcss?: boolean | TailwindCSSOptions;
 
 	/**
 	 * Enable pnpm (workspace/catalogs) support.
@@ -391,5 +391,6 @@ export interface OptionsConfig extends OptionsComponentExts, OptionsProjectType 
 		yaml?: TypedFlatConfigItem['rules'];
 		toml?: TypedFlatConfigItem['rules'];
 		svelte?: TypedFlatConfigItem['rules'];
+		tailwindcss?: TypedFlatConfigItem['rules'];
 	};
 }
