@@ -3,6 +3,7 @@ import type { Awaitable, ConfigNames, OptionsConfig, TypedFlatConfigItem } from 
 import type { Linter } from 'eslint';
 
 import { FlatConfigComposer } from 'eslint-flat-config-utils';
+import { findUp } from 'find-up-simple';
 import {
 	comments,
 	disables,
@@ -29,7 +30,7 @@ import {
 	yaml,
 } from './configs';
 import { regexp } from './configs/regexp';
-import { has_pnpm_catalogs, has_svelte, has_tailwindcss, has_typescript, is_in_editor_env } from './env';
+import { has_svelte, has_tailwindcss, has_typescript, is_in_editor_env } from './env';
 import { GLOB_MARKDOWN } from './globs';
 import { interop_default } from './utils';
 
@@ -76,7 +77,7 @@ export function defineConfig(
 		imports: enableImports = true,
 		jsdoc: enableJsdoc = true,
 		node: enableNode = true,
-		pnpm: enableCatalogs = has_pnpm_catalogs(),
+		pnpm: enableCatalogs = !!findUp('pnpm-workspace.yaml'),
 		regexp: enableRegexp = true,
 		svelte: enableSvelte = has_svelte(),
 		tailwindcss: enableTailwindcss = has_tailwindcss(),
