@@ -29,7 +29,6 @@ export async function has_pnpm_catalogs(): Promise<boolean> {
 
 export function is_in_git_hooks_or_lint_staged(): boolean {
 	return !!(
-
 		false
 		|| process.env.GIT_PARAMS
 		|| process.env.VSCODE_GIT_COMMAND
@@ -45,7 +44,6 @@ export function is_in_editor_env(): boolean {
 		return false;
 
 	return !!(
-
 		false
 		|| process.env.VSCODE_PID
 		|| process.env.VSCODE_CWD
