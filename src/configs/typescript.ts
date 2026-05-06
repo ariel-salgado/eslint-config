@@ -119,7 +119,9 @@ export async function typescript(
 			name: 'ariel/typescript/rules',
 			rules: {
 				...rename_rules(
-					plugin_ts.configs['eslint-recommended'].overrides![0].rules!,
+					(plugin_ts.configs['eslint-recommended'] as any).overrides?.[0]?.rules
+					?? plugin_ts.configs['eslint-recommended'].rules
+					?? {},
 					{ '@typescript-eslint': 'ts' },
 				),
 				...rename_rules(
@@ -130,6 +132,9 @@ export async function typescript(
 				'no-redeclare': 'off',
 				'no-use-before-define': 'off',
 				'no-useless-constructor': 'off',
+
+				'ts/quotes': 'off',
+
 				'ts/ban-ts-comment': ['error', { 'ts-expect-error': 'allow-with-description' }],
 				'ts/consistent-type-definitions': ['error', 'interface'],
 				'ts/consistent-type-imports': ['error', {

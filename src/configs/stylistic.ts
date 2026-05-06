@@ -44,6 +44,8 @@ export async function stylistic(
 			rules: {
 				...config.rules,
 
+				'style/quotes': ['error', quotes ?? 'single', { avoidEscape: true, allowTemplateLiterals: 'never' }],
+
 				...experimental
 					? {}
 					: {

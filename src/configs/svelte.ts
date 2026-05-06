@@ -49,9 +49,9 @@ export async function svelte(
 				parser: parser_svelte,
 				parserOptions: {
 					extraFileExtensions: ['.svelte'],
-					parser: options.typescript
-						? await interop_default(import('@typescript-eslint/parser'))
-						: null,
+					...(options.typescript && {
+						parser: await interop_default(import('@typescript-eslint/parser')),
+					}),
 				},
 			},
 			name: 'ariel/svelte/rules',
