@@ -47,7 +47,7 @@ export interface OptionsComponentExts {
 	/**
 	 * Additional extensions for components.
 	 *
-	 * @example ['vue']
+	 * @example ['svelte']
 	 * @default []
 	 */
 	componentExts?: string[];
@@ -151,7 +151,14 @@ export interface OptionsHasTailwindCSS extends OptionsOverrides {
 export interface TailwindCSSOptions {
 	entryPoint?: string;
 	printWidth?: number;
-	cwd?: string;
+	/**
+	 * Working directory for resolving the Tailwind CSS config.
+	 * Pass an array to support multiple packages in a monorepo — each entry
+	 * gets its own ESLint config block with the appropriate `cwd` setting.
+	 *
+	 * @default '.'
+	 */
+	cwd?: string | string[];
 }
 
 export interface OptionsOverrides {
