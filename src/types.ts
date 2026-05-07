@@ -152,9 +152,23 @@ export interface TailwindCSSOptions {
 	entryPoint?: string;
 	printWidth?: number;
 	/**
-	 * Working directory for resolving the Tailwind CSS config.
-	 * Pass an array to support multiple packages in a monorepo — each entry
-	 * gets its own ESLint config block with the appropriate `cwd` setting.
+	 * Working directory used by `eslint-plugin-better-tailwindcss` to resolve
+	 * the Tailwind CSS config file relative to the project root.
+	 *
+	 * Pass a **string array** (or an array of simple glob patterns ending with
+	 * `/*`) to support multiple packages in a monorepo. Each resolved directory
+	 * gets its own ESLint config block with the corresponding `cwd` setting, and
+	 * the linted `files` are automatically scoped to each subtree so the blocks
+	 * do not conflict.
+	 *
+	 * @example Single project
+	 * cwd: '.'
+	 *
+	 * @example Explicit monorepo paths
+	 * cwd: ['./apps/web', './apps/admin']
+	 *
+	 * @example Glob expansion (all immediate subdirectories)
+	 * cwd: ['./apps/*', './packages/*']
 	 *
 	 * @default '.'
 	 */
