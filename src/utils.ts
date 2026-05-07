@@ -2,6 +2,9 @@ import type { Awaitable, TypedFlatConfigItem } from './types';
 
 import process from 'node:process';
 
+import { readdirSync } from 'node:fs';
+import { createInterface } from 'node:readline';
+import { isatty } from 'node:tty';
 import { fileURLToPath } from 'node:url';
 import { isPackageExists } from 'local-pkg';
 
@@ -72,7 +75,7 @@ export function rename_rules(
 }
 
 /**
- * Rename plugin names a flat configs array
+ * Rename plugin names in a flat configs array.
  *
  * @example
  * ```ts
@@ -117,18 +120,107 @@ export function is_package_in_scope(name: string): boolean {
 	return isPackageExists(name, { paths: [scope_url] });
 }
 
-export async function ensure_packages(packages: (string | undefined)[]): Promise<void> {
-	if (process.env.CI || process.stdout.isTTY === false || is_cwd_in_scope === false)
-		return;
+/**
+ * Reliable TTY detection for both Node.js and Bun.
+ * Bun returns `undefined` (not `false`) for `process.stdout.isTTY`, so
+ * the `=== false` guard from the original code silently skips the check.
+ * `tty.isatty(1)` is the correct cross-runtime approach.
+ */
+function is_interactive(): boolean {
+	try {
+		return isatty(1);
+	}
+	catch {
+		// Fallback for environments where node:tty behaves unexpectedly.
+		return !!process.stdout.isTTY;
+	}
+}
 
-	const non_existing_packages = packages.filter(i => i && !is_package_in_scope(i)) as string[];
-	if (non_existing_packages.length === 0)
-		return;
-
-	const p = await import('@clack/prompts');
-	const result = await p.confirm({
-		message: `${non_existing_packages.length === 1 ? 'Package is' : 'Packages are'} required for this config: ${non_existing_packages.join(', ')}. Do you want to install them?`,
+/**
+ * Prompt the user with a yes/no question via node:readline.
+ * This replaces @clack/prompts which has known broken behaviour on Bun
+ * (stdin raw-mode issues, EPERM on fd:0, multi-prompt hangs).
+ */
+async function prompt_confirm(message: string): Promise<boolean> {
+	return new Promise((resolve) => {
+		const rl = createInterface({
+			input: process.stdin,
+			output: process.stdout,
+		});
+		rl.question(`\n◆  ${message} (y/N) `, (answer) => {
+			rl.close();
+			resolve(answer.trim().toLowerCase() === 'y' || answer.trim().toLowerCase() === 'yes');
+		});
 	});
-	if (result)
-		await import('@antfu/install-pkg').then(i => i.installPackage(non_existing_packages, { dev: true }));
+}
+
+export async function ensure_packages(packages: (string | undefined)[]): Promise<void> {
+	if (process.env.CI || !is_interactive() || is_cwd_in_scope === false)
+		return;
+
+	const non_existing = packages.filter(i => i && !is_package_in_scope(i)) as string[];
+	if (non_existing.length === 0)
+		return;
+
+	const msg = `${non_existing.length === 1 ? 'Package is' : 'Packages are'} required for this config: ${non_existing.join(', ')}. Do you want to install them?`;
+
+	try {
+		const confirmed = await prompt_confirm(msg);
+		if (confirmed)
+			await import('@antfu/install-pkg').then(i => i.installPackage(non_existing, { dev: true }));
+	}
+	catch {
+		process.stderr.write(
+			`\n[eslint-config] Could not prompt for missing packages. Please install manually: ${non_existing.join(', ')}\n\n`,
+		);
+	}
+}
+
+/**
+ * Expand a single cwd pattern entry into concrete directory paths.
+ *
+ * Supports simple glob patterns ending with `/*` or `/**` by listing all
+ * immediate subdirectories of the resolved base. Paths are normalised to
+ * forward slashes so that the results are valid in ESLint glob patterns on
+ * every OS.
+ *
+ * @example
+ * expand_cwd_globs('./apps/*')      // → ['./apps/web', './apps/admin']
+ * expand_cwd_globs('./packages/ui') // → ['./packages/ui']
+ */
+export function expand_cwd_globs(pattern: string): string[] {
+	// Normalise to forward slashes once so every subsequent check is OS-agnostic.
+	const normalized = pattern.replace(/\\/g, '/');
+
+	if (!normalized.includes('*'))
+		return [normalized];
+
+	// `<base>/*` or `<base>/**` — expand to the immediate subdirectories of base.
+	const star_idx = normalized.indexOf('*');
+	const base = normalized.slice(0, star_idx).replace(/\/$/, '') || '.';
+
+	try {
+		return readdirSync(base, { withFileTypes: true })
+			.filter(e => e.isDirectory())
+			.map(e => `${base}/${e.name}`);
+	}
+	catch {
+		// If the base dir does not exist yet (e.g. during initial setup), return
+		// an empty list rather than crashing the entire ESLint config load.
+		return [];
+	}
+}
+
+/**
+ * Normalise and expand a `cwd` value (string or array, optionally with glob
+ * patterns) to a flat list of concrete directory paths using forward slashes.
+ *
+ * @example
+ * resolve_cwd_list('.')                         // → ['.']
+ * resolve_cwd_list('./apps/*')                  // → ['./apps/web', './apps/admin']
+ * resolve_cwd_list(['./apps/*', './packages/*'])// → [...apps, ...packages]
+ */
+export function resolve_cwd_list(cwd: string | string[]): string[] {
+	const raw = to_array(cwd);
+	return raw.flatMap(expand_cwd_globs);
 }
