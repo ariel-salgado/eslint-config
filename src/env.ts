@@ -27,6 +27,10 @@ export async function has_pnpm_catalogs(): Promise<boolean> {
 	return yaml.includes('catalog:') || yaml.includes('catalogs:');
 }
 
+export function is_in_turbo(): boolean {
+	return Boolean(process.env.TURBO_HASH);
+}
+
 export function is_in_git_hooks_or_lint_staged(): boolean {
 	return !!(
 		false

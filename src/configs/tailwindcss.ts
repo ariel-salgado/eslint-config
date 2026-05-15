@@ -1,6 +1,6 @@
 import type { OptionsFiles, OptionsHasTailwindCSS, OptionsStylistic, TailwindCSSOptions, TypedFlatConfigItem } from '../types';
 
-import { has_svelte } from '../env';
+import { has_svelte, is_in_turbo } from '../env';
 import { GLOB_HTML, GLOB_SVELTE } from '../globs';
 import { ensure_packages, interop_default, resolve_cwd_list } from '../utils';
 
@@ -77,7 +77,7 @@ export async function tailwindcss(
 			settings: {
 				'better-tailwindcss': {
 					entryPoint,
-					cwd: path,
+					cwd: is_in_turbo() ? '.' : path,
 				},
 			},
 		}),
