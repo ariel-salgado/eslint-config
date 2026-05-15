@@ -66,8 +66,10 @@ export async function tailwindcss(
 			},
 		},
 		...cwds.map((path, i) => ({
-			files,
-			name: cwds.length > 1 ? `ariel/tailwindcss/rules/workspace-${i + 1}` : 'ariel/tailwindcss/rules',
+			files: files.map(file => `${path}/${file}`),
+			name: cwds.length > 1
+				? `ariel/tailwindcss/rules/workspace-${i + 1}`
+				: 'ariel/tailwindcss/rules',
 			...(has_svelte() && {
 				languageOptions: {
 					parser: svelte_eslint_parser,
@@ -80,7 +82,6 @@ export async function tailwindcss(
 					cwd: is_in_turbo() ? '.' : path,
 				},
 			},
-		}),
-		),
+		})),
 	];
 }
