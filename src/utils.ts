@@ -3,6 +3,7 @@ import type { Awaitable, TypedFlatConfigItem } from './types';
 import process from 'node:process';
 
 import { readdirSync } from 'node:fs';
+import { posix as path } from 'node:path';
 import { createInterface } from 'node:readline';
 import { isatty } from 'node:tty';
 import { fileURLToPath } from 'node:url';
@@ -172,26 +173,19 @@ export async function ensure_packages(packages: (string | undefined)[]): Promise
 	}
 }
 
-/**
- * Expand a single cwd pattern to concrete directory paths.
- *
- * Patterns containing `*` (e.g. `apps/*`, `./packages/**`) are expanded by
- * listing all immediate subdirectories of the base segment that precedes the
- * first `*`. This mirrors the monorepo convention where every direct child of
- * `apps/` or `packages/` is an independent project.
- */
 export function expand_cwd_globs(pattern: string): string[] {
-	const p = pattern.replace(/\\/g, '/');
+	const normalized = pattern.replace(/\\/g, '/');
 
-	if (!p.includes('*'))
-		return [p];
+	if (!normalized.includes('*')) {
+		return [normalized];
+	}
 
-	const base = p.slice(0, p.indexOf('*')).replace(/\/$/, '') || '.';
+	const base = normalized.slice(0, normalized.indexOf('*')).replace(/\/$/, '') || '.';
 
 	try {
 		return readdirSync(base, { withFileTypes: true })
-			.filter(e => e.isDirectory())
-			.map(e => `${base}/${e.name}`);
+			.filter(entry => entry.isDirectory())
+			.map(entry => `./${path.join(base, entry.name)}/`.replace(/^\.\/\.\//, './'));
 	}
 	catch {
 		return [];
