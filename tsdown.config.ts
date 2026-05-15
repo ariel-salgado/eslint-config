@@ -15,6 +15,18 @@ export default defineConfig({
 	dts: {
 		tsgo: true,
 	},
+	deps: {
+		onlyBundle: [
+			'eslint-visitor-keys',
+			'@eslint-community/eslint-utils',
+			'@typescript-eslint/utils',
+			'@typescript-eslint/types',
+			'@typescript-eslint/visitor-keys',
+			'@typescript-eslint/scope-manager',
+			'eslint-plugin-erasable-syntax-only',
+			'cached-factory',
+		],
+	},
 	publint: {
 		module: [
 			publint,
